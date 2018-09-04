@@ -1,0 +1,90 @@
+<html>
+	<head>	
+		<div class="w3-container">
+			<h1 style="float: left">Conquest Clicker</h1>
+			<h1 style="float: right"> <span id="goldDisplay">0</span> Gold</h1>
+			<h6 style="float: right"><span id="netGPS"></span> Gold/s </h6>
+		</div>
+		<div class="w3-bar w3-black">
+			<a class="w3-bar-item w3-button" onClick="tabSelect(1)" id="recruitButton">Recruit</a>
+			<a class="w3-bar-item w3-button" onClick="tabSelect(2)" id="questsButton">Quests</a>
+			<a class="w3-bar-item w3-button" onClick="tabSelect(3)" id="conquestButton">Conquest</a>
+			<a class="w3-bar-item w3-button" onClick="tabSelect(4)" id="settlementButton">Settlement</a>
+			
+			</div>
+		<div>
+	</head>
+	<body>		
+		<span id="recruitTab">
+			<div class="left w3-container">
+				<h2>Recruit</h2>
+				
+				<div>Here you can recruit soldiers who will fight for you. Each soldier has a maintenance fee of <b><span id="maintenance">1</span></b> Gold.</div>
+				</br>
+				<div><b>Soldiers: </b><span id="soldierDisplay">0</span> / <span id="maxSoldierDisplay">0</span></div>
+				<div><b>Maintenance costs: </b><span id="totalMaintenance">0</span> Gold</div>
+				</br>
+				<button id="buySoldier" class="w3-button w3-light-grey normal" onClick="buySoldier()">Recruit Soldier <span>(50 Gold)</span></button>
+				</br>
+				</br>
+				<button id="fireSoldier" class="w3-button w3-light-grey normal" onClick="fireSoldier()">Fire Soldier</button>
+			</div>
+		</span>
+		<span id="questsTab">
+			<div class="left w3-container">
+				<h2>Quests</h2>
+				<div>Here you can complete quests which reward you with gold and fame upon completion.</div>
+				</br>
+				<div><b class="w3-text-blue">Fame: </b><span id="fameDisplay">0</span></div>
+				<div><b>Fame required to unlock next quest: </b><span id="questFameRequired">250</span></div>
+				<h2 id="questName">Capture Pickpocketer</h2>
+				<button id="questAccept" class="w3-button w3-light-grey normal" onClick="battle()">Accept</button> 
+				</br>
+				</br>
+				<div><b>Briefing: </b><span id="questBriefing">A picpocketer is on the loose. Capture him dead or alive.</span></div>
+				<div><b>Quest rank: </b><span id="questRank">C</span></div>
+				<div><b>Gold reward: </b><span id="questGoldReward">50</span> Gold</div>
+				<div><b>Fame reward: </b><span id="questFameReward">30</span> Fame</div>
+				</br>
+				<button id="questsPrev" class="w3-button w3-light-grey prevnext" onClick="questsPrev()">Prev</button>
+				<button id="questsNext" class="w3-button w3-light-grey prevnext" onClick="questsNext()">Next</button>
+			</div>
+		</span>
+		<span id="conquestTab">
+			<div class="left w3-container">
+				<h2>Conquest</h2>
+				<div>Here you can annex civilisations, which grant you land, or you can turn them into puppets, which provides passive income.</div>
+				</br>
+				<button id="buyBattleStandard" class="w3-button w3-light-grey normal">Create Battle Standard (1000 Gold)</button>
+			</div>
+		</span>
+		<span>		
+			<div class="right w3-container">
+				<span>
+					<h2>Log</h2>
+					<div id="statusBox"></div>
+				</span>
+				<span id="battleBox">
+					<h2>Battle</h2>
+					<div id="statusbox">
+						<div><b>Soldiers: </b><span id="battleSoldierDisplay"></span></div>
+						</br>
+						<div class="w3-light-grey" style="width:250">
+							<div id="hpBar" class="w3-blue" style="height:24px;width:50%"></div>
+						</div>
+						</br>
+						<div><b class="w3-text-red">Enemy soldiers: </b><span id="enemyBattleSoldierDisplay"></span></div>
+						</br>
+						<div class="w3-light-grey" style="width:250">
+							<div id="enemyHpBar" class="w3-red" style="height:24px;width:50%"></div>
+						</div>
+					</div>
+				</span>
+			</div>
+			</div>
+		</span>	
+		<script type="text/javascript" src="main.js"></script>
+		<link rel="stylesheet" type="text/css" href="interface.css" />
+	    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+	</body>
+</html>

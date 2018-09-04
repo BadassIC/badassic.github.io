@@ -1,4 +1,4 @@
-//TO DO: Conquest tab
+//TO DO: Battle Standard
 var gold = 0
 var goldPerSecond = 5
 var netGPS = goldPerSecond - totalMaintenance
@@ -82,12 +82,15 @@ function updateValues(){
 	totalMaintenance = soldiers * maintenance
 	document.getElementById("goldDisplay").innerHTML = gold
 	document.getElementById("soldierDisplay").innerHTML = soldiers
+	document.getElementById("soldierDisplay2").innerHTML = soldiers
 	document.getElementById("maxSoldierDisplay").innerHTML = maxSoldiers
+	document.getElementById("maxSoldierDisplay2").innerHTML = maxSoldiers
 	document.getElementById("maintenance").innerHTML = maintenance
 	document.getElementById("totalMaintenance").innerHTML = totalMaintenance
 	netGPS = goldPerSecond - totalMaintenance
 	document.getElementById("netGPS").innerHTML = netGPS
 	document.getElementById("fameDisplay").innerHTML = fame
+	document.getElementById("fameDisplay2").innerHTML = fame
 	if (inCombat == true){
 		document.getElementById("battleBox").style.display = "block"
 	}else{
@@ -103,7 +106,7 @@ function tabUpdate(){
 		document.getElementById("conquestButton").innerHTML = "???"
 		document.getElementById("settlementButton").innerHTML = "???"
 		document.getElementById("recruitButton").style.display = "block"
-		document.getElementById("questsButton").style.display = "block"		
+		document.getElementById("questsButton").style.display = "none"		
 		document.getElementById("conquestButton").style.display = "none"
 		document.getElementById("settlementButton").style.display = "none"
 	}
@@ -114,7 +117,7 @@ function tabUpdate(){
 		document.getElementById("settlementButton").innerHTML = "???"
 		document.getElementById("recruitButton").style.display = "block"
 		document.getElementById("questsButton").style.display = "block"		
-		document.getElementById("conquestButton").style.display = "block"
+		document.getElementById("conquestButton").style.display = "none"
 		document.getElementById("settlementButton").style.display = "none"
 	}
 	if (stage == 3){
@@ -125,7 +128,7 @@ function tabUpdate(){
 		document.getElementById("recruitButton").style.display = "block"
 		document.getElementById("questsButton").style.display = "block"		
 		document.getElementById("conquestButton").style.display = "block"
-		document.getElementById("settlementButton").style.display = "block"
+		document.getElementById("settlementButton").style.display = "none"
 	}
 }
 
@@ -223,7 +226,7 @@ function secondUpdate(){
 	if (gold < 1){
 		gold = 0
 		soldiers = 0
-		nodeCreate = ("You have gone bankrupt. All your soldiers have left you.")
+		nodeCreate("You have gone bankrupt. All your soldiers have left you.")
 	}
 	document.getElementById("goldDisplay").innerHTML = gold
 }

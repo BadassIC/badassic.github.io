@@ -1,5 +1,5 @@
 //TO DO: Quest 5 and disable hire
-var gold = 9999456462225252
+var gold = 0
 var goldPerSecond = 5
 var netGPS = goldPerSecond - totalMaintenance
 
@@ -29,7 +29,7 @@ var inCombat = false
 var tab = "recruit"
 var stage = 1
 
-var fame = 45645645645
+var fame = 0
 var questLevel = 1
 var questPage = 1
 var initialQuestPage = 1

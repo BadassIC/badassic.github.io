@@ -278,7 +278,7 @@ function buttonUpdate(){
 	}else{
 		document.getElementById("fireLumberjack").disabled = false
 	}
-	if (lumberjacks.count <= 0){
+	if (miners.count <= 0){
 		document.getElementById("fireMiner").disabled = true
 	}else{
 		document.getElementById("fireMiner").disabled = false

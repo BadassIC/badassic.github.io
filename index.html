@@ -7,39 +7,41 @@
 			<a class="w3-bar-item w3-button" onClick="tabSelect(1)" id="recruitButton">Recruit</a>
 			<a class="w3-bar-item w3-button" onClick="tabSelect(2)" id="questsButton">Quests</a>
 			<a class="w3-bar-item w3-button" onClick="tabSelect(3)" id="conquestButton">Conquest</a>
-			<a class="w3-bar-item w3-button" onClick="tabSelect(4)" id="settlementButton">Settlement</a>			
+			<a class="w3-bar-item w3-button" onClick="tabSelect(4)" id="civilizationButton">Civilization</a>
+			<a class="w3-bar-item w3-button" onClick="tabSelect(5)" id="blacksmithButton">Blacksmith</a>
 		</div>
 		<div class="w3-bar w3-dark-gray">
-			<a class="w3-bar-item"><b class="w3-text-amber">Gold: </b><span id="goldDisplay"></span> (<span id="netGPS"></span> Gold/s)</a>
-			<a class="w3-bar-item"><b class="w3-text-white">Soldiers: </b><span id="soldierDisplay2">0</span> / <span id="maxSoldierDisplay2"></span></a>
-			<a class="w3-bar-item"><b class="w3-text-blue">Fame: </b><span id="fameDisplay2">0</span></a>
+			<a id="goldDisplayBar" class="w3-bar-item"><b class="w3-text-amber">Gold: </b><span id="goldDisplay"></span> (<span id="netGPS"></span> Gold/s)</a>
+			<a id="soldierDisplayBar" class="w3-bar-item"><b class="w3-text-white">Soldiers: </b><span id="soldierDisplay2">0</span> / <span id="maxSoldierDisplay2"></span></a>
+			<a id="fameDisplayBar" class="w3-bar-item"><b class="w3-text-blue">Fame: </b><span id="fameDisplay2">0</span></a>
+			<a id="gloryDisplayBar" class="w3-bar-item"><b class="w3-text-red">Glory: </b><span id="gloryDisplay2">0</span></a>
+			<a id="landDisplayBar" class="w3-bar-item"><b class="w3-text-green">Land used: </b><span id="landDisplay2">0</span> / <span id="maxLandDisplay2"></span></a>
 		</div>
 	</head>
 	<body>		
 		<span id="recruitTab">
 			<div class="left w3-container">
 				<h2>Recruit</h2>
-				
-				<div>Here you can recruit soldiers who will fight for you. Each soldier has a maintenance fee of <b><span id="maintenance">1</span></b> Gold.</div>
+				<div>Recruit soldiers who will fight for you. Each soldier has a maintenance fee of <b><span id="maintenance">1</span></b> Gold.</div>
 				</br>
 				<div><b>Soldiers: </b><span id="soldierDisplay">0</span> / <span id="maxSoldierDisplay">0</span></div>
 				<div><b>Maintenance costs: </b><span id="totalMaintenance">0</span> Gold</div>
 				</br>
-				<button id="buySoldier" class="w3-button w3-light-grey normal" onClick="buySoldier()">Recruit Soldier <span>(50 Gold)</span></button>
+				<button id="buySoldier" class="w3-button w3-light-grey big" onClick="buySoldier()">Recruit Soldier <span><i></br>(50 Gold) (+1 Soldiers)</i></span></button>
 				</br>
 				</br>
-				<button id="fireSoldier" class="w3-button w3-light-grey normal" onClick="fireSoldier()">Fire Soldier</button>
+				<button id="fireSoldier" class="w3-button w3-light-grey normal" onClick="fireSoldier()">Fire Soldier <span><i>(-1 Soldiers)</i></span></button>
 			</div>
 		</span>
 		<span id="questsTab">
 			<div class="left w3-container">
 				<h2>Quests</h2>
-				<div>Here you can complete quests which reward you with gold and fame upon completion.</div>
+				<div>Complete quests which reward you with gold and fame upon completion.</div>
 				</br>
 				<div><b class="w3-text-blue">Fame: </b><span id="fameDisplay">0</span></div>
 				<div><b>Fame required to unlock next quest: </b><span id="questFameRequired">250</span></div>
 				<h2 id="questName">Capture Pickpocketer</h2>
-				<button id="questAccept" class="w3-button w3-light-grey normal" onClick="battle()">Accept</button> 
+				<button id="questAccept" class="w3-button w3-light-grey normal" onClick="battle(1)">Accept</button> 
 				</br>
 				</br>
 				<div><b>Briefing: </b><span id="questBriefing">A picpocketer is on the loose. Capture him dead or alive.</span></div>
@@ -54,9 +56,70 @@
 		<span id="conquestTab">
 			<div class="left w3-container">
 				<h2>Conquest</h2>
-				<div>Here you can annex civilisations, which grant you land, or you can turn them into puppets, which provides passive income.</div>
+				<div>Raid and annex civilizations, which grants you land, or you can turn them into puppets, which provides passive income.</div>
+				<span id="battleStandard">
+					</br>
+					<button id="buyBattleStandard" class="w3-button w3-light-grey big" onClick="buyBattleStandard()">Create Battle Standard <i></br>(2500 Gold)</i></button>
+				</span>
+				<span id="conquest">
+					</br>
+					<div><b class="w3-text-red">Glory: </b><span id="gloryDisplay">0</span></div>
+					<div><b>Glory required to unlock next raid: </b><span id="conquestGloryRequired">250</span></div>
+					<h2 id="conquestName">Thorp</h2>
+					<button id="conquestRaid" class="w3-button w3-light-grey normal" onClick="battle(2)">Raid</button>
+					</br>
+					</br>
+					<div><b>Description:</b> <span id="conquestDescription">A very early civilization with neglible military power.</span></div>
+					<div><b>Land available: </b><span id="landReward"></span> Land</div>
+					<div><b>Glory reward: </b><span id="gloryReward"></span> Glory</div>
+					<div><b>Passive income: </b><span id="gpsReward">1</span> Gold/s</div>
+					</br>
+					<button id="conquestPrev" class="w3-button w3-light-grey prevnext" onClick="conquestPrev()">Prev</button>
+					<button id="conquestNext" class="w3-button w3-light-grey prevnext" onClick="conquestNext()">Next</button>
+				</span>
+			</div>
+		</span>
+		<span id="civilizationTab">
+			<div class="left w3-container">
+				<h2>Civilization</h2>
+				<div>Build up your own civilization which will support your army.</div>
 				</br>
-				<button id="buyBattleStandard" class="w3-button w3-light-grey normal">Create Battle Standard (5000 Gold)</button>
+				<div><b class="w3-text-green">Land used: </b><span id="landDisplay">0</span> / <span id="maxLandDisplay">0</span></div>
+				<div><b>Wood:</b> <span id="woodDisplay">0</span> (<span id="wps"></span> Wood/s)</div>
+				<div><b>Stone:</b> <span id="stoneDisplay">0</span> (<span id="sps"></span> Stone/s)</div>
+				<h2>Hire Workers</h2>
+				<div>Hire workers who will gather resources for you. Lumberjacks will gather wood and miners will gather stone. Each worker has a maintenance fee of <b>3</b> Gold.</div>
+				</br>
+				<div><b>Lumberjacks:</b> <span id="lumberjackDisplay">0</span></div>
+				<div><b>Miners:</b> <span id="minerDisplay">0</span></div>
+				<div><b>Maintenance costs:</b> <span id="workerMaintenanceCosts">0</span> Gold</div>
+				</br>
+				<button class="w3-button w3-light-grey big" id="hireLumberjack" onClick="hireLumberjack()">Hire Lumberjack <i></br>(200 Gold) (+1 Lumberjacks, +0.5 Wood/s)</i></button>
+				</br>
+				</br>
+				<button class="w3-button w3-light-grey normal" id="fireLumberjack" onClick="fireLumberjack()">Fire Lumberjack <i>(-1 Lumberjacks)</i></button>
+				</br>
+				</br>
+				<button class="w3-button w3-light-grey big" id="hireMiner" onClick="hireMiner()">Hire Miner <i></br>(200 Gold) (+1 Miners, +0.2 Stone/s)</i></button>
+				</br>
+				</br>
+				<button class="w3-button w3-light-grey normal" id="fireMiner" onClick="fireMiner()">Fire Miner <i>(-1 Miners)</i></button>					
+			</div>
+			<div class="left w3-container">
+				<h2>Build</h2>
+				<div>Build to expand both your civilization and army.</div>
+				</br>
+				<button class="w3-button w3-light-grey big" id="buildTent" onClick="buildTent()">Build Tent <i></br>(50 Wood, 50 Stone, 2 Land) (+1 Max Pop.)</i></button>
+				<!--
+				</br>
+				</br>
+				<button class="w3-button w3-light-grey big">Build Hut <i></br>(500 Wood, 500 Stone, 20 Land) (+10 Max Pop.)</i></button>
+				</br>
+				</br>
+				<button class="w3-button w3-light-grey big">Build Blacksmith <i></br>(50 Wood, 50 Stone, 30 Land) (Unlocks Blacksmith)</i></button>
+				</br>
+				</br>
+				-->
 			</div>
 		</span>
 		<span>		

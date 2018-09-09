@@ -1,5 +1,5 @@
 //TO DO: Quest 5 and disable hire
-var gold = 600000000000
+var gold = 0
 var goldPerSecond = 5
 var netGPS = goldPerSecond - totalMaintenance
 
@@ -133,7 +133,7 @@ var conquest2 = {
 var conquest3 = {
 	name: "Raid Small Village",
 	conquestDescription: "A small village with noticeable military power.",
-	landReward: 5,
+	landReward: 10,
 	gloryReward: 200,
 }
 

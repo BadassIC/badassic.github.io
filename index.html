@@ -1,8 +1,9 @@
 <html>
-	<head>	
-		<div class="w3-container">
-			<title>Conquest Clicker</title>
-			<h1 style="float: left">Conquest Clicker</h1>
+	<head>
+		<title>Conquest Clicker</title>
+		</link rel="shortcut icon" type="image/png" href="img/favicon.png">
+		<div class="w3-container">		
+			<h1 style="float: left" class="left">Conquest Clicker</h1>
 		</div>
 		<div class="w3-bar w3-black">
 			<a class="w3-bar-item w3-button" onClick="tabSelect(1)" id="recruitButton">Recruit</a>
@@ -10,6 +11,7 @@
 			<a class="w3-bar-item w3-button" onClick="tabSelect(3)" id="conquestButton">Conquest</a>
 			<a class="w3-bar-item w3-button" onClick="tabSelect(4)" id="civilizationButton">Civilization</a>
 			<a class="w3-bar-item w3-button" onClick="tabSelect(5)" id="blacksmithButton">Blacksmith</a>
+			<a style="float: right" class="w3-bar-item w3-button w3-red" onClick="quantityChange()" id="quantityButton">Quantity: x<span id="quantityNumber">1</span></a>
 		</div>
 		<div class="w3-bar w3-dark-gray">
 			<a id="goldDisplayBar" class="w3-bar-item"><b class="w3-text-amber">Gold: </b><span id="goldDisplay"></span> (<span id="netGPS"></span> Gold/s)</a>
@@ -28,10 +30,10 @@
 				<div><b>Soldiers: </b><span id="soldierDisplay">0</span> / <span id="maxSoldierDisplay">0</span></div>
 				<div><b>Maintenance costs: </b><span id="totalMaintenance">0</span> Gold</div>
 				</br>
-				<button id="buySoldier" class="w3-button w3-light-grey big" onClick="buySoldier()">Recruit Soldier <span><i></br>(50 Gold) (+1 Soldiers)</i></span></button>
+				<button id="buySoldier" class="w3-button w3-light-grey big" onClick="buySoldier()">Recruit Soldier <i></br>(<span id="buySoldierCost">50</span> Gold) (+<span id="buySoldierQuantity">1</span> Soldiers)</i></button>
 				</br>
 				</br>
-				<button id="fireSoldier" class="w3-button w3-light-grey normal" onClick="fireSoldier()">Fire Soldier <span><i>(-1 Soldiers)</i></span></button>
+				<button id="fireSoldier" class="w3-button w3-light-grey normal" onClick="fireSoldier()">Fire Soldier <i>(-<span id="fireSoldierQuantity">1</span> Soldiers)</i></button>
 			</div>
 		</span>
 		<span id="questsTab">
@@ -95,22 +97,24 @@
 				<div><b>Miners:</b> <span id="minerDisplay">0</span></div>
 				<div><b>Maintenance costs:</b> <span id="workerMaintenanceCosts">0</span> Gold</div>
 				</br>
-				<button class="w3-button w3-light-grey big" id="hireLumberjack" onClick="hireLumberjack()">Hire Lumberjack <i></br>(200 Gold) (+1 Lumberjacks, +1 Wood/s)</i></button>
+				<button class="w3-button w3-light-grey big" id="hireLumberjack" onClick="hireLumberjack()">Hire Lumberjack <i></br>(<span id="hireLumberjackCost">200</span> Gold) (+<span id="hireLumberjackQuantity">1</span> Lumberjacks, +<span id="lumberjackEfficiency">1</span> Wood/s)</i></button>
 				</br>
 				</br>
-				<button class="w3-button w3-light-grey normal" id="fireLumberjack" onClick="fireLumberjack()">Fire Lumberjack <i>(-1 Lumberjacks)</i></button>
+				<button class="w3-button w3-light-grey normal" id="fireLumberjack" onClick="fireLumberjack()">Fire Lumberjack <i>(-<span id="fireLumberjackQuantity">1</span> Lumberjacks)</i></button>
 				</br>
 				</br>
-				<button class="w3-button w3-light-grey big" id="hireMiner" onClick="hireMiner()">Hire Miner <i></br>(200 Gold) (+1 Miners, +1 Stone/s)</i></button>
+				<button class="w3-button w3-light-grey big" id="hireMiner" onClick="hireMiner()">Hire Miner <i></br>(<span id="hireMinerCost">200</span> Gold) (+<span id="hireMinerQuantity">1</span> Miners, +<span id="minerEfficiency">1</span> Stone/s)</i></button>
 				</br>
 				</br>
-				<button class="w3-button w3-light-grey normal" id="fireMiner" onClick="fireMiner()">Fire Miner <i>(-1 Miners)</i></button>					
+				<button class="w3-button w3-light-grey normal" id="fireMiner" onClick="fireMiner()">Fire Miner <i>(-<span id="fireMinerQuantity">1</span> Miners)</i></button>					
 			</div>
 			<div class="left w3-container">
 				<h2>Build</h2>
 				<div>Build to expand both your civilization and army.</div>
 				</br>
-				<button class="w3-button w3-light-grey big" id="buildTent" onClick="buildTent()">Build Tent <i></br>(50 Wood, 50 Stone, 2 Land) (+2 Max Pop.)</i></button>
+				<button class="w3-button w3-light-grey big" id="buildTent" onClick="buildTent()">Build Tent <i></br>
+				(<span id="tentWood">50 Wood</span>, <span id="tentStone">50</span> Stone, <span id="tentLand">2</span> Land) (+<span id="tentPopulation">2</span> Max Pop.)
+				</i></button>
 				<br id="landlordBreak1"></br>
 				<button class="w3-button w3-light-grey big" id="buildLandlord" onClick="buildLandlord()">Build Landlord's Office<i></br>(100 Wood, 100 Stone, 3 Land) (Land Gives Gold/s)</i></button>
 				<!--

@@ -1,4 +1,4 @@
-//TO DO: Quest 5 and disable hire
+//TO DO: Quantity button
 var gold = 0
 var goldPerSecond = 5
 var netGPS = goldPerSecond - totalMaintenance
@@ -67,6 +67,8 @@ var tents = {
 var landlord = {
 	level: 0
 }
+var quantity = 1
+var quantityOption = 1
 
 var quest1 = {
 	name: "Capture a Pickpocketer",
@@ -118,7 +120,7 @@ var conquest1 = {
 	conquestDescription: "A very early civilization with neglible military power.",
 	landReward: 1,
 	gloryReward: 50,
-	gloryRequired: Math.round(500 * Math.pow(3, 0)),
+	gloryRequired: Math.round(500 * Math.pow(3, 0))
 }
 
 var conquest2 = {
@@ -126,15 +128,16 @@ var conquest2 = {
 	conquestDescription: "An early civilization with insignificant military power.",
 	landReward: 5,
 	gloryReward: 100,
-	gloryRequired: Math.round(550 * Math.pow(3, 1)),
+	gloryRequired: Math.round(550 * Math.pow(3, 1))
 
 }
 
 var conquest3 = {
 	name: "Raid Small Village",
 	conquestDescription: "A small village with noticeable military power.",
-	landReward: 10,
+	landReward: 25,
 	gloryReward: 200,
+	gloryRequired: Math.round(600 * Math.pow(3, 2))
 }
 
 tabSelect(1)
@@ -158,6 +161,32 @@ function updateValues(){
 	wps = lumberjacks.count * lumberjacks.efficiency
 	sps = miners.count * miners.efficiency
 	maxSoldiers = 10 + (tents.population * tents.count)
+	if (quantityOption == 1){
+		quantity = 1
+	}
+	if (quantityOption == 2){
+		quantity = 10
+	}
+	if (quantityOption == 3){
+		quantity = 100
+	}
+	document.getElementById("quantityNumber").innerHTML = quantity
+	document.getElementById("buySoldierCost").innerHTML = 50 * quantity
+	document.getElementById("buySoldierQuantity").innerHTML = quantity
+	document.getElementById("fireSoldierQuantity").innerHTML = quantity
+	document.getElementById("hireLumberjackCost").innerHTML = 200 * quantity
+	document.getElementById("hireMinerCost").innerHTML = 200 * quantity
+	document.getElementById("hireLumberjackQuantity").innerHTML = quantity
+	document.getElementById("hireMinerQuantity").innerHTML = quantity
+	document.getElementById("fireLumberjackQuantity").innerHTML = quantity
+	document.getElementById("fireMinerQuantity").innerHTML = quantity
+	document.getElementById("lumberjackEfficiency").innerHTML = lumberjacks.efficiency * quantity
+	document.getElementById("minerEfficiency").innerHTML = miners.efficiency * quantity
+	document.getElementById("tentWood").innerHTML = 50 * quantity
+	document.getElementById("tentStone").innerHTML = 50 * quantity
+	document.getElementById("tentLand").innerHTML = 2 * quantity
+	document.getElementById("tentPopulation").innerHTML = 2 * quantity
+	
 	document.getElementById("goldDisplay").innerHTML = gold
 	document.getElementById("soldierDisplay").innerHTML = soldiers
 	document.getElementById("soldierDisplay2").innerHTML = soldiers
@@ -246,12 +275,12 @@ function tabUpdate(){
 
 setInterval(buttonUpdate, 10)
 function buttonUpdate(){
-	if (gold < 50 || inCombat == true || soldiers >= maxSoldiers){
+	if (gold < (50 * quantity) || inCombat == true || (soldiers + 1 * quantity) > maxSoldiers){
 		document.getElementById("buySoldier").disabled = true
 	}else{
 		document.getElementById("buySoldier").disabled = false
 	}
-	if (soldiers <= 0 || inCombat == true){
+	if (soldiers < (1 * quantity) || inCombat == true){
 		document.getElementById("fireSoldier").disabled = true
 	}else{
 		document.getElementById("fireSoldier").disabled = false
@@ -268,24 +297,24 @@ function buttonUpdate(){
 	}else{
 		document.getElementById("buyBattleStandard").disabled = false
 	}
-	if (gold < 200){
+	if (gold < (200 * quantity)){
 		document.getElementById("hireLumberjack").disabled = true
 		document.getElementById("hireMiner").disabled = true
 	}else{
 		document.getElementById("hireLumberjack").disabled = false
 		document.getElementById("hireMiner").disabled = false
 	}
-	if (lumberjacks.count <= 0){
+	if (lumberjacks.count < (1 * quantity)){
 		document.getElementById("fireLumberjack").disabled = true
 	}else{
 		document.getElementById("fireLumberjack").disabled = false
 	}
-	if (miners.count <= 0){
+	if (miners.count < (1 * quantity)){
 		document.getElementById("fireMiner").disabled = true
 	}else{
 		document.getElementById("fireMiner").disabled = false
 	}
-	if (wood < 50 || stone < 50 || landFree < 2){
+	if (wood < (50 * quantity) || stone < (50 * quantity) || landFree < (2 * quantity)){
 		document.getElementById("buildTent").disabled = true
 	}else{
 		document.getElementById("buildTent").disabled = false
@@ -487,61 +516,93 @@ function tabSelect(tabNo){
 	}
 }
 
+function quantityChange(){
+	if (quantityOption == 1){
+		quantityOption = 2
+		return
+	}
+	if (quantityOption == 2){
+		quantityOption = 3
+		return
+	}
+	if (quantityOption == 3){
+		quantityOption = 1
+		return
+	}
+}
+
 function buySoldier(){
-	if (gold >= 50 && soldiers < maxSoldiers){
-		if (stage == 1){
-			stage = 2
-			nodeCreate("Maybe you should put your new soldier to some use...")
-		}
-		soldiers += 1
-		gold -= 50
-		updateValues()
+	for (i = 0; i < quantity; i++){
+		if (gold >= 50 && soldiers < maxSoldiers){
+			if (stage == 1){
+				stage = 2
+				nodeCreate("Maybe you should put your new soldier to some use...")
+			}
+			soldiers += 1
+			gold -= 50
+			updateValues()
+		}	
 	}
 }
 
 function fireSoldier(){
-	if (soldiers > 0){
-		soldiers -= 1;
-		updateValues()
+	for (i= 0; i < quantity; i++){
+		if (soldiers > 0){
+			soldiers -= 1;
+			updateValues()
+		}
 	}
 }
 
 function hireLumberjack(){
-	if (gold >= 200){
-		lumberjacks.count += 1
-		gold -= 200
-		updateValues()
+	for (i= 0; i < quantity; i++){
+		if (gold >= 200){
+			lumberjacks.count += 1
+			gold -= 200
+			updateValues()
+		}
 	}
 }
 
 function fireLumberjack(){
-	if (lumberjacks.count > 0){
-		lumberjacks.count -= 1
-		updateValues()
+	for (i= 0; i < quantity; i++){
+		if (lumberjacks.count > 0){
+			lumberjacks.count -= 1
+			updateValues()
+		}	
 	}
 }
 
 function hireMiner(){
-	if (gold >= 200){
-		miners.count += 1
-		gold -= 200
-		updateValues()
+	for (i= 0; i < quantity; i++){
+		if (gold >= 200){
+			miners.count += 1
+			gold -= 200
+			updateValues()
+		}
 	}
+	
 }
 
 function fireMiner(){
-	if (miners.count > 0){
-		miners.count -= 1
-		updateValues()
+	for (i= 0; i < quantity; i++){
+		if (miners.count > 0){
+			miners.count -= 1
+			updateValues()
+		}
 	}
+	
 }
 
 function buildTent(){
-	if (wood >= 50 && stone >= 50 && landFree >= 2){
-		wood -= 50
-		stone -= 50
-		landUsed += 2
-		tents.count += 1
+	for (i= 0; i < quantity; i++){
+		if (wood >= 50 && stone >= 50 && landFree >= 2){
+			wood -= 50
+			stone -= 50
+			landUsed += 2
+			tents.count += 1
+			updateValues()
+		}
 	}
 }
 
@@ -551,6 +612,7 @@ function buildLandlord(){
 		stone -= 100
 		landUsed += 3
 		landlord.level += 1
+		updateValues()
 	}
 }
 

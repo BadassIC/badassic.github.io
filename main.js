@@ -1,5 +1,5 @@
 //TO DO: Quest 5 and disable hire
-var gold = 0
+var gold = 600000000000
 var goldPerSecond = 5
 var netGPS = goldPerSecond - totalMaintenance
 
@@ -45,6 +45,7 @@ var battleType = "quest"
 var land = 3
 var landFree = 0
 var landUsed = 0
+var landIncome = 0
 var wood = 0
 var stone = 0
 var wps = 0
@@ -62,6 +63,9 @@ var miners = {
 var tents = {
 	count: 0,
 	population: 2
+}
+var landlord = {
+	level: 0
 }
 
 var quest1 = {
@@ -115,16 +119,15 @@ var conquest1 = {
 	landReward: 1,
 	gloryReward: 50,
 	gloryRequired: Math.round(500 * Math.pow(3, 0)),
-	gpsReward: 1
 }
 
 var conquest2 = {
 	name: "Raid Hamlet",
 	conquestDescription: "An early civilization with insignificant military power.",
-	landReward: 3,
+	landReward: 5,
 	gloryReward: 100,
 	gloryRequired: Math.round(550 * Math.pow(3, 1)),
-	gpsReward: 2
+
 }
 
 var conquest3 = {
@@ -132,8 +135,6 @@ var conquest3 = {
 	conquestDescription: "A small village with noticeable military power.",
 	landReward: 5,
 	gloryReward: 200,
-	gloryRequired: Math.round(600 * Math.pow(3, 2)),
-	gpsReward: 3
 }
 
 tabSelect(1)
@@ -147,10 +148,15 @@ setInterval(updateValues, 10)
 function updateValues(){
 	totalMaintenance = (soldiers * maintenance)
 	workerMaintenance = (lumberjacks.count * lumberjacks.maintenance) + (miners.count * miners.maintenance)
-	netGPS = goldPerSecond - totalMaintenance - workerMaintenance
+	landFree = land - landUsed
+	if (landlord.level >= 1){
+		landIncome = landFree
+	}else{
+		landIncome = 0
+	}
+	netGPS = goldPerSecond + landIncome - totalMaintenance - workerMaintenance 
 	wps = lumberjacks.count * lumberjacks.efficiency
 	sps = miners.count * miners.efficiency
-	landFree = land - landUsed
 	maxSoldiers = 10 + (tents.population * tents.count)
 	document.getElementById("goldDisplay").innerHTML = gold
 	document.getElementById("soldierDisplay").innerHTML = soldiers
@@ -168,6 +174,7 @@ function updateValues(){
 	document.getElementById("maxLandDisplay").innerHTML = land
 	document.getElementById("landDisplay2").innerHTML = landUsed
 	document.getElementById("maxLandDisplay2").innerHTML = land
+	document.getElementById("landIncome").innerHTML = landIncome
 	document.getElementById("woodDisplay").innerHTML = Math.floor(wood)
 	document.getElementById("stoneDisplay").innerHTML = Math.floor(stone)
 	document.getElementById("wps").innerHTML = wps
@@ -268,11 +275,6 @@ function buttonUpdate(){
 		document.getElementById("hireLumberjack").disabled = false
 		document.getElementById("hireMiner").disabled = false
 	}
-	if (wood < 50 || stone < 50 || landFree < 2){
-		document.getElementById("buildTent").disabled = true
-	}else{
-		document.getElementById("buildTent").disabled = false
-	}
 	if (lumberjacks.count <= 0){
 		document.getElementById("fireLumberjack").disabled = true
 	}else{
@@ -282,6 +284,23 @@ function buttonUpdate(){
 		document.getElementById("fireMiner").disabled = true
 	}else{
 		document.getElementById("fireMiner").disabled = false
+	}
+	if (wood < 50 || stone < 50 || landFree < 2){
+		document.getElementById("buildTent").disabled = true
+	}else{
+		document.getElementById("buildTent").disabled = false
+	}
+	if (wood < 100 || stone < 100 || landFree < 3){
+		document.getElementById("buildLandlord").disabled = true
+	}else{
+		document.getElementById("buildLandlord").disabled = false
+	}
+	if (landlord.level >= 1){
+		document.getElementById("buildLandlord").style.display = "none"
+		document.getElementById("landlordBreak1").style.display = "none"
+	}else{
+		document.getElementById("buildLandlord").style.display = "block"
+		document.getElementById("landlordBreak1").style.display = "block"
 	}
 }
 
@@ -401,21 +420,18 @@ function conquestDetailsUpdate(){
 		document.getElementById("conquestDescription").innerHTML = conquest1.conquestDescription
 		document.getElementById("landReward").innerHTML = conquest1.landReward
 		document.getElementById("gloryReward").innerHTML = conquest1.gloryReward
-		document.getElementById("gpsReward").innerHTML = conquest1.gpsReward
 	}
 	if (conquestPage == 2){
 		document.getElementById("conquestName").innerHTML = conquest2.name
 		document.getElementById("conquestDescription").innerHTML = conquest2.conquestDescription
 		document.getElementById("landReward").innerHTML = conquest2.landReward
 		document.getElementById("gloryReward").innerHTML = conquest2.gloryReward
-		document.getElementById("gpsReward").innerHTML = conquest2.gpsReward
 	}
 	if (conquestPage == 3){
 		document.getElementById("conquestName").innerHTML = conquest3.name
 		document.getElementById("conquestDescription").innerHTML = conquest3.conquestDescription
 		document.getElementById("landReward").innerHTML = conquest3.landReward
 		document.getElementById("gloryReward").innerHTML = conquest3.gloryReward
-		document.getElementById("gpsReward").innerHTML = conquest3.gpsReward
 	}
 }
 
@@ -529,6 +545,15 @@ function buildTent(){
 	}
 }
 
+function buildLandlord(){
+	if (wood >= 100 && stone >= 100 && landFree >= 3){
+		wood -= 100
+		stone -= 100
+		landUsed += 3
+		landlord.level += 1
+	}
+}
+
 function questsPrev(){
 	questPage -= 1
 }
@@ -631,8 +656,8 @@ function battle(type){
 		}
 		if (initialQuestPage == 5){
 			enemySoldiers = 2
-			enemySoldiers = 10
-			enemySoldierStats.attack = 0.2
+			enemySoldierStats.hp = 10
+			enemySoldierStats.attack = 0.3
 		}
 	}
 	if (type == 2){
@@ -645,7 +670,7 @@ function battle(type){
 		}
 		if (initialConquestPage == 2){
 			enemySoldiers = 30
-			enemySoldierStats.hp = 2
+			enemySoldierStats.hp = 1.5
 			enemySoldierStats.attack = 0.1
 		}
 		if (initialConquestPage == 3){

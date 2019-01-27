@@ -439,7 +439,7 @@ setInterval(function(){
 		document.getElementById("enrolMain").style.display = "none"
 	}
 	
-	if (money < 5000){
+	if (money < 1000){
 		document.getElementById("enrolButton").disabled = true
 	}else{
 		document.getElementById("enrolButton").disabled = false

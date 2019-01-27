@@ -1,158 +1,166 @@
 <html>
 	<head>
-		<title>Conquest Clicker</title>
-		</link rel="shortcut icon" type="image/png" href="img/favicon.png">
-		<div class="w3-container">		
-			<h1 style="float: left" class="left">Conquest Clicker</h1>
-		</div>
-		<div class="w3-bar w3-black">
-			<a class="w3-bar-item w3-button" onClick="tabSelect(1)" id="recruitButton">Recruit</a>
-			<a class="w3-bar-item w3-button" onClick="tabSelect(2)" id="questsButton">Quests</a>
-			<a class="w3-bar-item w3-button" onClick="tabSelect(3)" id="conquestButton">Conquest</a>
-			<a class="w3-bar-item w3-button" onClick="tabSelect(4)" id="civilizationButton">Civilization</a>
-			<a class="w3-bar-item w3-button" onClick="tabSelect(5)" id="blacksmithButton">Blacksmith</a>
-			<a style="float: right" class="w3-bar-item w3-button w3-red" onClick="quantityChange()" id="quantityButton">Quantity: x<span id="quantityNumber">1</span></a>
-		</div>
-		<div class="w3-bar w3-dark-gray">
-			<a id="goldDisplayBar" class="w3-bar-item"><b class="w3-text-amber">Gold: </b><span id="goldDisplay"></span> (<span id="netGPS"></span> Gold/s)</a>
-			<a id="soldierDisplayBar" class="w3-bar-item"><b class="w3-text-white">Soldiers: </b><span id="soldierDisplay2">0</span> / <span id="maxSoldierDisplay2"></span></a>
-			<a id="fameDisplayBar" class="w3-bar-item"><b class="w3-text-blue">Fame: </b><span id="fameDisplay2">0</span></a>
-			<a id="gloryDisplayBar" class="w3-bar-item"><b class="w3-text-red">Glory: </b><span id="gloryDisplay2">0</span></a>
-			<a id="landDisplayBar" class="w3-bar-item"><b class="w3-text-green">Land used: </b><span id="landDisplay2">0</span> / <span id="maxLandDisplay2"></span></a>
+		<div class="w3-container">
+			<h1 class="left">Incremental Fishing</h1>
+			<h1 class="right">$<span id="money">1515</span></h1>
 		</div>
 	</head>
-	<body>		
-		<span id="recruitTab">
-			<div class="left w3-container">
-				<h2>Recruit</h2>
-				<div>Recruit soldiers who will fight for you. Each soldier has a maintenance fee of <b><span id="maintenance">1</span></b> Gold.</div>
-				</br>
-				<div><b>Soldiers: </b><span id="soldierDisplay">0</span> / <span id="maxSoldierDisplay">0</span></div>
-				<div><b>Maintenance costs: </b><span id="totalMaintenance">0</span> Gold</div>
-				</br>
-				<button id="buySoldier" class="w3-button w3-light-grey big" onClick="buySoldier()">Recruit Soldier <i></br>(<span id="buySoldierCost">50</span> Gold) (+<span id="buySoldierQuantity">1</span> Soldiers)</i></button>
-				</br>
-				</br>
-				<button id="fireSoldier" class="w3-button w3-light-grey normal" onClick="fireSoldier()">Fire Soldier <i>(-<span id="fireSoldierQuantity">1</span> Soldiers)</i></button>
+	<body>
+		<div class="w3-bar w3-blue">
+			<button onClick="go(1)" class="w3-bar-item w3-button">Lake</button>
+			<button onClick="go(2)" class="w3-bar-item w3-button">Store</button>
+			<button onClick="go(3)" class="w3-bar-item w3-button" id="boatBought">Fishing boat</button>
+			<button onClick="go(4)" class="w3-bar-item w3-button" id="anglerBar">Angler</button>
+			<button onClick="go(5)" class="w3-bar-item w3-button" id="schoolBar">Fishing school</button>
+		</div>
+		<div class="left">
+			<div id="area" class="w3-container">
+				<h2><span id="lakeName"></span> Lake</h2>
+				<div>Cast your line then reel when the button starts flashing.</div>
+				<div><b>Fishing power:</b> <span id="fishingPower">1</span></div>
+				<div class="position1">
+					<h2>Fish</h2>
+					<button class="w3-button button2" id="castLineButton" onClick="castLine()">Cast out line</button>
+					<button class="w3-button button2" id="reelLineButton" onClick="reelLine()">Reel in line</button>
+					<!--
+					<div id="frenzyDisplay"></br><button class="w3-button button1" id="frenzyActivate" onClick="frenzyActivate()">Activate fishing frenzy ()</button></div>
+					<div id="barrageDisplay"></br><button class="w3-button button1" id="barrageActivate" onClick="barrage()">Activate fishing barrage</button></div>
+					-->
+				</div>
 			</div>
-		</span>
-		<span id="questsTab">
-			<div class="left w3-container">
-				<h2>Quests</h2>
-				<div>Complete quests which reward you with gold and fame upon completion.</div>
-				</br>
-				<div><b class="w3-text-blue">Fame: </b><span id="fameDisplay">0</span></div>
-				<div><b>Fame required to unlock next quest: </b><span id="questFameRequired">250</span></div>
-				<h2 id="questName">Capture Pickpocketer</h2>
-				<button id="questAccept" class="w3-button w3-light-grey normal" onClick="battle(1)">Accept</button> 
-				</br>
-				</br>
-				<div><b>Briefing: </b><span id="questBriefing">A picpocketer is on the loose. Capture him dead or alive.</span></div>
-				<div><b>Quest rank: </b><span id="questRank">C</span></div>
-				<div><b>Gold reward: </b><span id="questGoldReward">50</span> Gold</div>
-				<div><b>Fame reward: </b><span id="questFameReward">30</span> Fame</div>
-				</br>
-				<button id="questsPrev" class="w3-button w3-light-grey prevnext" onClick="questsPrev()">Prev</button>
-				<button id="questsNext" class="w3-button w3-light-grey prevnext" onClick="questsNext()">Next</button>
+			<div id="store" class="w3-container">
+				<h2><span id="storeName"></span> Store</h2>
+				<div>Sell fish and buy upgrades.</div>
+				<div class="position1">
+					<h2>Sell</h2>
+					<div id="tinCanSell"><button class="w3-button button1" onClick="sell(1)">Sell tin cans ($<span id="tinCanValue"></span>)</button><br></br></div>
+					<div id="rubberDuckSell"><button class="w3-button button1" onClick="sell(2)">Sell rubber ducks ($<span id="rubberDuckValue"></span>)</button><br></br></div>
+					<div id="oldBootSell"><button class="w3-button button1" onClick="sell(3)">Sell old boots ($<span id="oldBootValue"></span>)</button><br></br></div>
+					<div id="bassSell"><button class="w3-button button1" onClick="sell(4)">Sell bass ($<span id="bassValue"></span>)</button><br></br></div>
+					<div id="tunaSell"><button class="w3-button button1" onClick="sell(5)">Sell tuna ($<span id="tunaValue"></span>)</button><br></br></div>
+					<div id="salmonSell"><button class="w3-button button1" onClick="sell(6)">Sell salmon ($<span id="salmonValue"></span>)</button><br></br></div>
+					<div id="pikeSell"><button class="w3-button button1" onClick="sell(7)">Sell pike ($<span id="pikeValue"></span>)</button><br></br></div>
+					<div id="swordfishSell"><button class="w3-button button1" onClick="sell(8)">Sell swordfish ($<span id="swordfishValue"></span>)</button><br></br></div>
+					<div id="clownfishSell"><button class="w3-button button1" onClick="sell(9)">Sell clownfish ($<span id="clownfishValue"></span>)</button><br></br></div>
+					<div id="eelSell"><button class="w3-button button1" onClick="sell(10)">Sell eel ($<span id="eelValue"></span>)</button><br></br></div>
+					<div id="anglerfishSell"><button class="w3-button button1" onClick="sell(11)">Sell anglerfish ($<span id="anglerfishValue"></span>)</button><br></br></div>
+					<div id="squidSell"><button class="w3-button button1" onClick="sell(12)">Sell squid ($<span id="squidValue"></span>)</button><br></br></div>
+				</div>
+				<div class="position1">
+					<h2>Buy</h2>
+					<div id="stringUpgrade"><button id="stringDisabled" class="w3-button button1" onClick="buy(1)">Buy string level <span id="stringLevel"></span> ($<span id="stringPrice"></span>)</button><br></br></div>
+					<div id="hookUpgrade"><button id="hookDisabled" class="w3-button button1" onClick="buy(2)">Buy hook level <span id="hookLevel"></span> ($<span id="hookPrice"></span>)</button><br></br></div>
+					<div id="reelUpgrade"><button id="reelDisabled" class="w3-button button1" onClick="buy(3)">Buy reel level <span id="reelLevel"></span> ($<span id="reelPrice"></span>)</button><br></br></div>
+					<div id="poleUpgrade"><button id="poleDisabled" class="w3-button button1" onClick="buy(4)">Buy pole level <span id="poleLevel"></span> ($<span id="polePrice"></span>)</button><br></br></div>
+					<div id="boatUpgrade"><button id="boatDisabled" class="w3-button button1" onClick="buy(5)">Buy boat level <span id="boatLevel"></span> ($<span id="boatPrice"></span>)</button><br></br></div>
+				</div>		
 			</div>
-		</span>
-		<span id="conquestTab">
-			<div class="left w3-container">
-				<h2>Conquest</h2>
-				<div>Raid and annex civilizations, which grants you land.</div>
-				<span id="battleStandard">
-					</br>
-					<button id="buyBattleStandard" class="w3-button w3-light-grey big" onClick="buyBattleStandard()">Create Battle Standard <i></br>(2500 Gold)</i></button>
-				</span>
-				<span id="conquest">
-					</br>
-					<div><b class="w3-text-red">Glory: </b><span id="gloryDisplay">0</span></div>
-					<div><b>Glory required to unlock next raid: </b><span id="conquestGloryRequired">250</span></div>
-					<h2 id="conquestName">Thorp</h2>
-					<button id="conquestRaid" class="w3-button w3-light-grey normal" onClick="battle(2)">Raid</button>
-					</br>
-					</br>
-					<div><b>Description:</b> <span id="conquestDescription">A very early civilization with neglible military power.</span></div>
-					<div><b>Land available: </b><span id="landReward"></span> Land</div>
-					<div><b>Glory reward: </b><span id="gloryReward"></span> Glory</div>
-					</br>
-					<button id="conquestPrev" class="w3-button w3-light-grey prevnext" onClick="conquestPrev()">Prev</button>
-					<button id="conquestNext" class="w3-button w3-light-grey prevnext" onClick="conquestNext()">Next</button>
-				</span>
+			<div id="fishingBoat" class="w3-container">
+				<h2>Fishing boat</h2>
+				<div>Travel to different places to catch better fish and buy better equipment.</div>
+				</br>
+				<div id="travel1"><button id="travel1Disabled" class="w3-button button1" onClick="travel(1)">Travel to Hedgefield</button></br></div>
+				<div id="travel2"><button id="travel2Disabled" class="w3-button button1" onClick="travel(2)">Travel to Lochsummer</button></br></div>
+				<div id="travel3"><button id="travel3Disabled" class="w3-button button1" onClick="travel(3)">Travel to Whiteshore</button></br></div>
 			</div>
-		</span>
-		<span id="civilizationTab">
-			<div class="left w3-container">
-				<h2>Civilization</h2>
-				<div>Build up your own civilization which will support your army.</div>
-				</br>
-				<div><b class="w3-text-green">Land used: </b><span id="landDisplay">0</span> / <span id="maxLandDisplay">0</span></div>
-				<div><b>Passive income: </b><span id="landIncome"></span> Gold/s</div>
-				<div><b>Wood:</b> <span id="woodDisplay">0</span> (<span id="wps"></span> Wood/s)</div>
-				<div><b>Stone:</b> <span id="stoneDisplay">0</span> (<span id="sps"></span> Stone/s)</div>
-				<h2>Hire Workers</h2>
-				<div>Hire workers who will gather resources for you. Lumberjacks will gather wood and miners will gather stone. Each worker has a maintenance fee of <b>3</b> Gold.</div>
-				</br>
-				<div><b>Lumberjacks:</b> <span id="lumberjackDisplay">0</span></div>
-				<div><b>Miners:</b> <span id="minerDisplay">0</span></div>
-				<div><b>Maintenance costs:</b> <span id="workerMaintenanceCosts">0</span> Gold</div>
-				</br>
-				<button class="w3-button w3-light-grey big" id="hireLumberjack" onClick="hireLumberjack()">Hire Lumberjack <i></br>(<span id="hireLumberjackCost">200</span> Gold) (+<span id="hireLumberjackQuantity">1</span> Lumberjacks, +<span id="lumberjackEfficiency">1</span> Wood/s)</i></button>
-				</br>
-				</br>
-				<button class="w3-button w3-light-grey normal" id="fireLumberjack" onClick="fireLumberjack()">Fire Lumberjack <i>(-<span id="fireLumberjackQuantity">1</span> Lumberjacks)</i></button>
-				</br>
-				</br>
-				<button class="w3-button w3-light-grey big" id="hireMiner" onClick="hireMiner()">Hire Miner <i></br>(<span id="hireMinerCost">200</span> Gold) (+<span id="hireMinerQuantity">1</span> Miners, +<span id="minerEfficiency">1</span> Stone/s)</i></button>
-				</br>
-				</br>
-				<button class="w3-button w3-light-grey normal" id="fireMiner" onClick="fireMiner()">Fire Miner <i>(-<span id="fireMinerQuantity">1</span> Miners)</i></button>					
+			<div id="angler" class="w3-container">
+				<h2>Angler</h2>
+				<div>Complete the angler's quests for huge rewards.</div>
+				<div class="w3-panel w3-blue w3-card" style=" width: 335px">
+					<h2>Quest (<span id="questTimer">17</span>)</h2>
+					<div>Catch <span id="questReq">5</span> <span id="questObj">salmon</span>.</div>
+					<div>Reward: $<span id="questReward">500</span></div>
+					<button class="w3-section w3-button button1" onClick="questRedeem()">Redeem</button>
+				</div>
 			</div>
-			<div class="left w3-container">
-				<h2>Build</h2>
-				<div>Build to expand both your civilization and army.</div>
-				</br>
-				<button class="w3-button w3-light-grey big" id="buildTent" onClick="buildTent()">Build Tent <i></br>
-				(<span id="tentWood">50 Wood</span>, <span id="tentStone">50</span> Stone, <span id="tentLand">2</span> Land) (+<span id="tentPopulation">2</span> Max Pop.)
-				</i></button>
-				<br id="landlordBreak1"></br>
-				<button class="w3-button w3-light-grey big" id="buildLandlord" onClick="buildLandlord()">Build Landlord's Office<i></br>(100 Wood, 100 Stone, 3 Land) (Land Gives Gold/s)</i></button>
-				<!--
-				</br>
-				</br>
-				<button class="w3-button w3-light-grey big">Build Blacksmith <i></br>(50 Wood, 50 Stone, 30 Land) (Unlocks Blacksmith)</i></button>
-				</br>
-				</br>
-				-->
-			</div>
-		</span>
-		<span>		
-			<div class="right w3-container">
-				<span>
-					<h2>Log</h2>
-					<div id="statusBox"></div>
-				</span>
-				<span id="battleBox">
-					<h2>Battle</h2>
-					<div id="statusbox">
-						<div><b>Soldiers: </b><span id="battleSoldierDisplay"></span></div>
-						</br>
-						<div class="w3-light-grey" style="width:250">
-							<div id="hpBar" class="w3-blue" style="height:24px;width:50%"></div>
+			<div id="school" class="w3-container">
+				<h2>Fishing school</h2>
+				<div>Learn new skills to aid you in your fishing journey.</div>
+				<div id="enrolMain"></br><button id="enrolButton" onClick="enrol()" class="w3-button button1">Enrol in fishing course ($1000)</button></div>
+				<div id="enroled">
+					<div class="position1">
+						<h2 style="display:inline-block;margin-right:10px;">Level <span id="level">1</span></h2>
+						<div style="display:inline-block"><b>XP: </b><span id="xp">2</span>/<span id="xpMax">10</span></div>
+						<div style="display:inline-block"><b>SP: </b><span id="sp">0</span></div>
+						<div class="w3-light-grey" style="width:300">		
+							<div id="xpBar" class="w3-blue" style="height:39px;width:20%"></div>
 						</div>
-						</br>
-						<div><b class="w3-text-red">Enemy soldiers: </b><span id="enemyBattleSoldierDisplay"></span></div>
-						</br>
-						<div class="w3-light-grey" style="width:250">
-							<div id="enemyHpBar" class="w3-red" style="height:24px;width:50%"></div>
-						</div>
+						<h2>Passive skills</h2>
+						<button onClick="negLearn()" id="negButton" class="w3-button button1">Learn negotiating lvl <span id="negLevel">1</span> (<span id="negPrice"></span>SP)</button>
+						<div class="w3-padding-8">Increases money received from selling fish by 10%. Current increase: <b id="negEffect"></b>%</div>
+						<button onClick="patienceLearn()" id="patienceButton" class="w3-button button1">Learn patience lvl <span id="patienceLevel">1</span> (<span id="patiencePrice">5</span>SP)</button>
+						<div class="w3-padding-8">Decreases the minimum/maximum waiting time for catching fish by 10%. Current decrease: <b id="patienceEffect">0.5</b>%</div>
+						<span id="activeHide">
+							<h2>Active skills</h2>
+							<button onClick="frenzyLearn()" id="frenzyButton" class="w3-button button1">Learn fishing frenzy lvl <span id="frenzyLevel">1</span> (<span id="frenzyPrice">5</span>SP)</button>
+							<div class="w3-padding-8">An active ability which lets you catch fish without any waiting time for a brief moment. Current active: <b id="frenzyEffect">3</b> seconds</div>
+							<button onClick="barrageLearn()" id="barrageButton" class="w3-button button1">Learn fishing barrage lvl <span id="barrageLevel">1</span> (<span id="barragePrice">5</span>SP)</button>
+							<div class="w3-padding-8">An active ability which lets your next reel in catch multiple fish. Current active: <b id="barrageEffect">3</b>x</div>
+						</span>
 					</div>
-				</span>
+					<div class="position1" style="width: 300px">
+	
+					</div>				
+				</div>
 			</div>
+		</div>
+		<div class="right">
+			<div id="inventory" class="w3-container">
+				<h2>Inventory</h2>
+				<table class="w3-table" style="width: 200px">
+					<tr id="tinCanRow">
+						<td class="w3-text-brown"><b>Tin can</b><td>
+						<td id="tinCanQuantity">0</td>
+					</tr>
+					<tr id="rubberDuckRow">
+						<td class="w3-text-brown"><b>Rubber duck</b><td>
+						<td id="rubberDuckQuantity">0</td>
+					</tr>
+					<tr id="oldBootRow">
+						<td class="w3-text-brown"><b>Old boot</b><td>
+						<td id="oldBootQuantity">0</td>
+					</tr>
+					<tr id="bassRow">
+						<td class="w3-text-dark-gray"><b>Bass</b><td>
+						<td id="bassQuantity">0</td>
+					</tr>
+					<tr id="tunaRow">
+						<td class="w3-text-dark-gray"><b>Tuna</b><td>
+						<td id="tunaQuantity">0</td>
+					</tr>
+					<tr id="salmonRow">
+						<td class="w3-text-dark-gray"><b>Salmon</b><td>
+						<td id="salmonQuantity">0</td>
+					</tr>
+					<tr id="pikeRow">
+						<td class="w3-text-blue-gray"><b>Pike</b><td>
+						<td id="pikeQuantity">0</td>
+					</tr>
+					<tr id="swordfishRow">
+						<td class="w3-text-blue-gray"><b>Swordfish</b><td>
+						<td id="swordfishQuantity">0</td>
+					</tr>
+					<tr id="clownfishRow">
+						<td class="w3-text-blue-gray"><b>Clownfish</b><td>
+						<td id="clownfishQuantity">0</td>
+					</tr>
+					<tr id="eelRow">
+						<td class="w3-text-teal"><b>Eel</b><td>
+						<td id="eelQuantity">0</td>
+					</tr>
+					<tr id="anglerfishRow">
+						<td class="w3-text-teal"><b>Anglerfish</b><td>
+						<td id="anglerfishQuantity">0</td>
+					</tr>
+					<tr id="squidRow">
+						<td class="w3-text-teal"><b>Squid</b><td>
+						<td id="squidQuantity">0</td>
+					</tr>
+				</table>
 			</div>
-		</span>	
+		</div>
 		<script type="text/javascript" src="main.js"></script>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">	
 		<link rel="stylesheet" type="text/css" href="interface.css" />
-	    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
 	</body>
 </html>

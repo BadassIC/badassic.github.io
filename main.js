@@ -1,787 +1,956 @@
-//TO DO: Quantity button
-var gold = 0
-var goldPerSecond = 5
-var netGPS = goldPerSecond - totalMaintenance
+//TO DO: Complete fishing school buttons
+money = 0
 
-var soldiers = 0
-var maxSoldiers = 10
-var maintenance = 1
-var totalMaintenance = 1
-var soldierStats = {
-	hp: 1,
-	attack: 0.05
-}
-var battleHp = soldiers * soldierStats.hp
-var initialBattleHp = battleHp
-var battleSoldier = soldiers
+line = "cast"
+baited = false
+rodQuality = 0
+fishChance = 0
+fishingSite = 1
+fishingPower
+place = "Hedgefield"
+reelStatus = 1
 
-var enemySoldiers = 0
-var enemySoldierStats = {
-	hp: 0,
-	attack: 0
-}
-var enemyBattleHp = 0
-var enemyInitialBattleHp = enemyBattleHp
-var enemyBattleSoldier = 0
+questChance = 0
+questObj = 1
+questReq = 0
+questReward = 0
+questTimer = 0
 
-var inCombat = false
+level = 1
+xp = 0
+xpMax = 10
+sp = 0
 
-var tab = "recruit"
-var stage = 1
+enroled = false
 
-var fame = 0
-var questLevel = 1
-var questPage = 1
-var initialQuestPage = 1
-
-var glory = 0
-var conquestLevel = 0
-var conquestUnlocked = false
-var conquestPage = 1
-var initialConquestPage = 1
-
-var battleType = "quest"
-
-var land = 3
-var landFree = 0
-var landUsed = 0
-var landIncome = 0
-var wood = 0
-var stone = 0
-var wps = 0
-var sps = 0
-var lumberjacks = {
-	count: 0,
-	maintenance: 3,
-	efficiency: 1
-}
-var miners = {
-	count: 0,
-	maintenance: 3,
-	efficiency: 1
-}
-var tents = {
-	count: 0,
-	population: 2
-}
-var landlord = {
-	level: 0
-}
-var quantity = 1
-var quantityOption = 1
-
-var quest1 = {
-	name: "Capture a Pickpocketer",
-	briefing: "A pickpocketer is roaming around town. Capture him.",
-	questRank: "D-",
-	goldReward: Math.round(25 * Math.pow(3, 0)),
-	fameReward: 50,
-	fameRequired: Math.round(250 * Math.pow(3, 0))
+neg = {
+	level: 0,
+	cost: 1,
+	multiplier: 1
 }
 
-var quest2 = {
-	name: "Capture Graveyard Robbers",
-	briefing: "A few graveyard robbers have been digging up corpses without permission. Capture them.",
-	questRank: "D",
-	goldReward: Math.round(25 * Math.pow(3, 1)),
-	fameReward: 100,
-	fameRequired: Math.round(300 * Math.pow(3, 1))
+patience = {
+	level: 0,
+	cost: 1,
+	multiplier: 1
 }
 
-var quest3 = {
-	name: "Capture a Grizzly Bear",
-	briefing: "A grizzy bear is on the loose. Capture it.",
-	questRank: "D+",
-	goldReward: Math.round(25 * Math.pow(3, 2)),
-	fameReward: 200,
-	fameRequired: Math.round(350 * Math.pow(3, 2))
+frenzy = {
+	level: 0,
+	cost: 3,
+	active: 3,
+	activated: false,
+	timer: 0
 }
 
-var quest4 = {
-	name: "Capture a Gang of Thugs",
-	briefing: "A gang of thugs need to be taken care of. Capture them.",
-	questRank: "C-",
-	goldReward: Math.round(25 * Math.pow(3, 3)),
-	fameReward: 400,
-	fameRequired: Math.ceil(400 * Math.pow(3, 3))
+barrage = {
+	level: 0,
+	cost: 3,
+	multiplier: 1
 }
 
-var quest5 = {
-	name: "Capture Rogue Soldiers",
-	briefing: "A few rogue soldiers from a nearby town have been attacking civilians. Capture them.",
-	questRank: "C",
-	goldReward: Math.round(25 * Math.pow(3, 4)),
-	fameReward: 800,
-	fameRequired: Math.ceil(450 * Math.pow(3, 4))
+string = {
+	level: 1,
+	price: 10
 }
 
-var conquest1 = {
-	name: "Raid Thorp",
-	conquestDescription: "A very early civilization with neglible military power.",
-	landReward: 1,
-	gloryReward: 50,
-	gloryRequired: Math.round(500 * Math.pow(3, 0))
+hook = {
+	level: 1,
+	price: 20
 }
 
-var conquest2 = {
-	name: "Raid Hamlet",
-	conquestDescription: "An early civilization with insignificant military power.",
-	landReward: 5,
-	gloryReward: 100,
-	gloryRequired: Math.round(550 * Math.pow(3, 1))
-
+reel = {
+	level: 1,
+	price: 30
 }
 
-var conquest3 = {
-	name: "Raid Small Village",
-	conquestDescription: "A small village with noticeable military power.",
-	landReward: 25,
-	gloryReward: 200,
-	gloryRequired: Math.round(600 * Math.pow(3, 2))
+pole = {
+	level: 1,
+	price: 40
 }
 
-tabSelect(1)
-document.getElementById("goldDisplayBar").style.display = "none"
-document.getElementById("soldierDisplayBar").style.display = "none"
-document.getElementById("fameDisplayBar").style.display = "none"
-document.getElementById("gloryDisplayBar").style.display = "none"
-document.getElementById("landDisplayBar").style.display = "none"
+boat = {
+	level: 0,
+	price: 100
+}
 
-setInterval(updateValues, 10)	
-function updateValues(){
-	totalMaintenance = (soldiers * maintenance)
-	workerMaintenance = (lumberjacks.count * lumberjacks.maintenance) + (miners.count * miners.maintenance)
-	landFree = land - landUsed
-	if (landlord.level >= 1){
-		landIncome = landFree
+tinCan = {
+	quantity: 0,
+	value: Math.round(1 * neg.multiplier)
+}
+
+rubberDuck = {
+	quantity: 0,
+	value: Math.round(3 * neg.multiplier)
+}
+
+oldBoot = {
+	quantity: 0,
+	value: Math.round(5 * neg.multiplier)
+}
+
+bass = {
+	quantity: 0,
+	value: Math.round(10 * neg.multiplier)
+}
+
+tuna = {
+	quantity: 0,
+	value: Math.round(30 * neg.multiplier)
+}
+
+salmon = {
+	quantity: 0,
+	value: Math.round(50 * neg.multiplier)
+}
+
+pike = {
+	quantity: 0,
+	value: Math.round(100 * neg.multiplier)
+}
+
+swordfish = {
+	quantity: 0,
+	value: Math.round(300 * neg.multiplier)
+}
+
+clownfish = {
+	quantity: 0,
+	value: Math.round(500 * neg.multiplier)
+}
+
+eel = {
+	quantity:  0,
+	value: Math.round(1000 * neg.multiplier)
+}
+
+anglerfish = {
+	quantity: 0,
+	value: Math.round(3000 * neg.multiplier)
+}
+
+squid = {
+	quantity: 0,
+	value: Math.round(5000 * neg.multiplier)
+}
+
+setInterval(function(){
+	if (tinCan.quantity > 0){
+		document.getElementById("tinCanRow").style.display = "block"
+		document.getElementById("tinCanSell").style.display = "block"
 	}else{
-		landIncome = 0
+		document.getElementById("tinCanRow").style.display = "none"
+		document.getElementById("tinCanSell").style.display = "none"
 	}
-	netGPS = goldPerSecond + landIncome - totalMaintenance - workerMaintenance 
-	wps = lumberjacks.count * lumberjacks.efficiency
-	sps = miners.count * miners.efficiency
-	maxSoldiers = 10 + (tents.population * tents.count)
-	if (quantityOption == 1){
-		quantity = 1
+	if (rubberDuck.quantity > 0){
+		document.getElementById("rubberDuckRow").style.display = "block"
+		document.getElementById("rubberDuckSell").style.display = "block"
+	}else{
+		document.getElementById("rubberDuckRow").style.display = "none"
+		document.getElementById("rubberDuckSell").style.display = "none"
 	}
-	if (quantityOption == 2){
-		quantity = 10
+	if (oldBoot.quantity > 0){
+		document.getElementById("oldBootRow").style.display = "block"
+		document.getElementById("oldBootSell").style.display = "block"
+	}else{
+		document.getElementById("oldBootRow").style.display = "none"
+		document.getElementById("oldBootSell").style.display = "none"
 	}
-	if (quantityOption == 3){
-		quantity = 100
+	if (bass.quantity > 0){
+		document.getElementById("bassRow").style.display = "block"
+		document.getElementById("bassSell").style.display = "block"
+	}else{
+		document.getElementById("bassRow").style.display = "none"
+		document.getElementById("bassSell").style.display = "none"
 	}
-	document.getElementById("quantityNumber").innerHTML = quantity
-	document.getElementById("buySoldierCost").innerHTML = 50 * quantity
-	document.getElementById("buySoldierQuantity").innerHTML = quantity
-	document.getElementById("fireSoldierQuantity").innerHTML = quantity
-	document.getElementById("hireLumberjackCost").innerHTML = 200 * quantity
-	document.getElementById("hireMinerCost").innerHTML = 200 * quantity
-	document.getElementById("hireLumberjackQuantity").innerHTML = quantity
-	document.getElementById("hireMinerQuantity").innerHTML = quantity
-	document.getElementById("fireLumberjackQuantity").innerHTML = quantity
-	document.getElementById("fireMinerQuantity").innerHTML = quantity
-	document.getElementById("lumberjackEfficiency").innerHTML = lumberjacks.efficiency * quantity
-	document.getElementById("minerEfficiency").innerHTML = miners.efficiency * quantity
-	document.getElementById("tentWood").innerHTML = 50 * quantity
-	document.getElementById("tentStone").innerHTML = 50 * quantity
-	document.getElementById("tentLand").innerHTML = 2 * quantity
-	document.getElementById("tentPopulation").innerHTML = 2 * quantity
+	if (tuna.quantity > 0){
+		document.getElementById("tunaRow").style.display = "block"
+		document.getElementById("tunaSell").style.display = "block"
+	}else{
+		document.getElementById("tunaRow").style.display = "none"
+		document.getElementById("tunaSell").style.display = "none"
+	}
+	if (salmon.quantity > 0){
+		document.getElementById("salmonRow").style.display = "block"
+		document.getElementById("salmonSell").style.display = "block"
+	}else{
+		document.getElementById("salmonRow").style.display = "none"
+		document.getElementById("salmonSell").style.display = "none"
+	}
+	if (pike.quantity > 0){
+		document.getElementById("pikeRow").style.display = "block"
+		document.getElementById("pikeSell").style.display = "block"
+	}else{
+		document.getElementById("pikeRow").style.display = "none"
+		document.getElementById("pikeSell").style.display = "none"
+	}
+	if (swordfish.quantity > 0){
+		document.getElementById("swordfishRow").style.display = "block"
+		document.getElementById("swordfishSell").style.display = "block"
+	}else{
+		document.getElementById("swordfishRow").style.display = "none"
+		document.getElementById("swordfishSell").style.display = "none"
+	}
+	if (clownfish.quantity > 0){
+		document.getElementById("clownfishRow").style.display = "block"
+		document.getElementById("clownfishSell").style.display = "block"
+	}else{
+		document.getElementById("clownfishRow").style.display = "none"
+		document.getElementById("clownfishSell").style.display = "none"
+	}
+	if (eel.quantity > 0){
+		document.getElementById("eelRow").style.display = "block"
+		document.getElementById("eelSell").style.display = "block"
+	}else{
+		document.getElementById("eelRow").style.display = "none"
+		document.getElementById("eelSell").style.display = "none"
+	}
+	if (anglerfish.quantity > 0){
+		document.getElementById("anglerfishRow").style.display = "block"
+		document.getElementById("anglerfishSell").style.display = "block"
+	}else{
+		document.getElementById("anglerfishRow").style.display = "none"
+		document.getElementById("anglerfishSell").style.display = "none"
+	}
+	if (squid.quantity > 0){
+		document.getElementById("squidRow").style.display = "block"
+		document.getElementById("squidSell").style.display = "block"
+	}else{
+		document.getElementById("squidRow").style.display = "none"
+		document.getElementById("squidSell").style.display = "none"
+	}
+
+	if (money >= string.price){
+		document.getElementById("stringDisabled").disabled = false
+	}else{
+		document.getElementById("stringDisabled").disabled = true
+	}
+	if (money >= hook.price){
+		document.getElementById("hookDisabled").disabled = false
+	}else{
+		document.getElementById("hookDisabled").disabled = true
+	}
+	if (money >= reel.price){
+		document.getElementById("reelDisabled").disabled = false
+	}else{
+		document.getElementById("reelDisabled").disabled = true
+	}
+	if (money >= pole.price){
+		document.getElementById("poleDisabled").disabled = false
+	}else{
+		document.getElementById("poleDisabled").disabled = true
+	}
+	if (money >= boat.price){
+		document.getElementById("boatDisabled").disabled = false
+	}else{
+		document.getElementById("boatDisabled").disabled = true
+	}
 	
-	document.getElementById("goldDisplay").innerHTML = gold
-	document.getElementById("soldierDisplay").innerHTML = soldiers
-	document.getElementById("soldierDisplay2").innerHTML = soldiers
-	document.getElementById("maxSoldierDisplay").innerHTML = maxSoldiers
-	document.getElementById("maxSoldierDisplay2").innerHTML = maxSoldiers
-	document.getElementById("maintenance").innerHTML = maintenance
-	document.getElementById("totalMaintenance").innerHTML = totalMaintenance
-	document.getElementById("netGPS").innerHTML = netGPS
-	document.getElementById("fameDisplay").innerHTML = fame
-	document.getElementById("fameDisplay2").innerHTML = fame
-	document.getElementById("gloryDisplay").innerHTML = glory
-	document.getElementById("gloryDisplay2").innerHTML = glory
-	document.getElementById("landDisplay").innerHTML = landUsed
-	document.getElementById("maxLandDisplay").innerHTML = land
-	document.getElementById("landDisplay2").innerHTML = landUsed
-	document.getElementById("maxLandDisplay2").innerHTML = land
-	document.getElementById("landIncome").innerHTML = landIncome
-	document.getElementById("woodDisplay").innerHTML = Math.floor(wood)
-	document.getElementById("stoneDisplay").innerHTML = Math.floor(stone)
-	document.getElementById("wps").innerHTML = wps
-	document.getElementById("sps").innerHTML = sps
-	document.getElementById("lumberjackDisplay").innerHTML = lumberjacks.count
-	document.getElementById("minerDisplay").innerHTML = miners.count
-	document.getElementById("workerMaintenanceCosts").innerHTML = workerMaintenance
-	if (inCombat == true){
-		document.getElementById("battleBox").style.display = "block"
-	}else{
-		document.getElementById("battleBox").style.display = "none"
-	}
-}
-
-setInterval(tabUpdate, 10)
-function tabUpdate(){
-	if (stage == 1){
-		document.getElementById("goldDisplayBar").style.display = "block"
-		document.getElementById("soldierDisplayBar").style.display = "block"
-		document.getElementById("fameDisplayBar").style.display = "none"
-		document.getElementById("gloryDisplayBar").style.display = "none"
-		document.getElementById("landDisplayBar").style.display = "none"
-		document.getElementById("recruitButton").style.display = "block"
-		document.getElementById("questsButton").style.display = "none"		
-		document.getElementById("conquestButton").style.display = "none"
-		document.getElementById("civilizationButton").style.display = "none"
-		document.getElementById("blacksmithButton").style.display = "none"
-	}
-	if (stage == 2){
-		document.getElementById("goldDisplayBar").style.display = "block"
-		document.getElementById("soldierDisplayBar").style.display = "block"
-		document.getElementById("fameDisplayBar").style.display = "block"
-		document.getElementById("gloryDisplayBar").style.display = "none"
-		document.getElementById("landDisplayBar").style.display = "none"
-		document.getElementById("recruitButton").style.display = "block"
-		document.getElementById("questsButton").style.display = "block"		
-		document.getElementById("conquestButton").style.display = "none"
-		document.getElementById("civilizationButton").style.display = "none"
-		document.getElementById("blacksmithButton").style.display = "none"
-	}
-	if (stage == 3){
-		document.getElementById("goldDisplayBar").style.display = "block"
-		document.getElementById("soldierDisplayBar").style.display = "block"
-		document.getElementById("fameDisplayBar").style.display = "block"
-		if (conquestUnlocked == true){
-			document.getElementById("gloryDisplayBar").style.display = "block"
+	tinCan.value = Math.round(1 * neg.multiplier)
+	rubberDuck.value = Math.round(3 * neg.multiplier)
+	oldBoot.value = Math.round(5 * neg.multiplier)
+	bass.value = Math.round(10 * neg.multiplier)
+	tuna.value = Math.round(30 * neg.multiplier)
+	salmon.value = Math.round(50 * neg.multiplier)
+	pike.value = Math.round(100 * neg.multiplier)
+	swordfish.value = Math.round(300 * neg.multiplier)
+	clownfish.value = Math.round(500 * neg.multiplier)
+	eel.value = Math.round(1000 * neg.multiplier)
+	anglerfish.value = Math.round(3000 * neg.multiplier)
+	squid.value = Math.round(5000 * neg.multiplier)
+	
+	if (fishingSite == 1){
+		place = "Hedgefield"
+		document.getElementById("travel1Disabled").disabled = true
+		document.getElementById("travel2Disabled").disabled = false
+		document.getElementById("travel3Disabled").disabled = false
+		if (string.level <= 1){
+			document.getElementById("stringUpgrade").style.display = "block"
+		}else{
+			document.getElementById("stringUpgrade").style.display = "none"
 		}
-		document.getElementById("landDisplayBar").style.display = "none"
-		document.getElementById("recruitButton").style.display = "block"
-		document.getElementById("questsButton").style.display = "block"		
-		document.getElementById("conquestButton").style.display = "block"
-		document.getElementById("civilizationButton").style.display = "none"
-		document.getElementById("blacksmithButton").style.display = "none"
-	}
-	if (stage == 4){
-		document.getElementById("goldDisplayBar").style.display = "block"
-		document.getElementById("soldierDisplayBar").style.display = "block"
-		document.getElementById("fameDisplayBar").style.display = "block"
-		document.getElementById("gloryDisplayBar").style.display = "block"
-		document.getElementById("landDisplayBar").style.display = "block"
-		document.getElementById("recruitButton").style.display = "block"
-		document.getElementById("questsButton").style.display = "block"		
-		document.getElementById("conquestButton").style.display = "block"
-		document.getElementById("civilizationButton").style.display = "block"
-		document.getElementById("blacksmithButton").style.display = "none"
-	}
-}
-
-
-setInterval(buttonUpdate, 10)
-function buttonUpdate(){
-	if (gold < (50 * quantity) || inCombat == true || (soldiers + 1 * quantity) > maxSoldiers){
-		document.getElementById("buySoldier").disabled = true
-	}else{
-		document.getElementById("buySoldier").disabled = false
-	}
-	if (soldiers < (1 * quantity) || inCombat == true){
-		document.getElementById("fireSoldier").disabled = true
-	}else{
-		document.getElementById("fireSoldier").disabled = false
-	}
-	if (soldiers <= 0 || inCombat == true){
-		document.getElementById("questAccept").disabled = true
-		document.getElementById("conquestRaid").disabled = true
-	}else{
-		document.getElementById("questAccept").disabled = false
-		document.getElementById("conquestRaid").disabled = false
-	}
-	if (gold < 2500 || inCombat == true){
-		document.getElementById("buyBattleStandard").disabled = true
-	}else{
-		document.getElementById("buyBattleStandard").disabled = false
-	}
-	if (gold < (200 * quantity)){
-		document.getElementById("hireLumberjack").disabled = true
-		document.getElementById("hireMiner").disabled = true
-	}else{
-		document.getElementById("hireLumberjack").disabled = false
-		document.getElementById("hireMiner").disabled = false
-	}
-	if (lumberjacks.count < (1 * quantity)){
-		document.getElementById("fireLumberjack").disabled = true
-	}else{
-		document.getElementById("fireLumberjack").disabled = false
-	}
-	if (miners.count < (1 * quantity)){
-		document.getElementById("fireMiner").disabled = true
-	}else{
-		document.getElementById("fireMiner").disabled = false
-	}
-	if (wood < (50 * quantity) || stone < (50 * quantity) || landFree < (2 * quantity)){
-		document.getElementById("buildTent").disabled = true
-	}else{
-		document.getElementById("buildTent").disabled = false
-	}
-	if (wood < 100 || stone < 100 || landFree < 3){
-		document.getElementById("buildLandlord").disabled = true
-	}else{
-		document.getElementById("buildLandlord").disabled = false
-	}
-	if (landlord.level >= 1){
-		document.getElementById("buildLandlord").style.display = "none"
-		document.getElementById("landlordBreak1").style.display = "none"
-	}else{
-		document.getElementById("buildLandlord").style.display = "block"
-		document.getElementById("landlordBreak1").style.display = "block"
-	}
-}
-
-setInterval(fameUpdate, 10)
-function fameUpdate(){
-	if (fame >= 0 && fame < quest1.fameRequired){
-		questLevel = 1
-		document.getElementById("questFameRequired").innerHTML = quest1.fameRequired
-	}else if (fame >= quest1.fameRequired && fame < quest2.fameRequired){
-		questLevel = 2
-		document.getElementById("questFameRequired").innerHTML = quest2.fameRequired
-	}else if (fame >= quest2.fameRequired && fame < quest3.fameRequired){
-		questLevel = 3
-		document.getElementById("questFameRequired").innerHTML = quest3.fameRequired
-	}else if (fame >= quest3.fameRequired && fame < quest4.fameRequired){
-		questLevel = 4
-		document.getElementById("questFameRequired").innerHTML = quest4.fameRequired
-	}else if (fame >= quest4.fameRequired){
-		questLevel = 5
-		document.getElementById("questFameRequired").innerHTML = quest5.fameRequired
-	}
-	if (fame >= quest1.fameRequired && stage == 2){
-			stage = 3
-			nodeCreate("It's time for world domination.")
-	}
-}
-
-setInterval(gloryUpdate, 10)
-function gloryUpdate(){
-	if (conquestUnlocked == true){
-		document.getElementById("battleStandard").style.display = "none"
-		document.getElementById("conquest").style.display = "block"
-		if (glory >= 0 && glory < conquest1.gloryRequired){
-			conquestLevel = 1
-			document.getElementById("conquestGloryRequired").innerHTML = conquest1.gloryRequired
-		}else if(glory >= conquest1.gloryRequired && glory < conquest2.gloryRequired){
-			conquestLevel = 2
-			document.getElementById("conquestGloryRequired").innerHTML = conquest2.gloryRequired			
-		}else if(glory >= conquest2.gloryRequired){
-			conquestLevel = 3
-			document.getElementById("conquestGloryRequired").innerHTML = conquest3.gloryRequired	
+		if (hook.level <= 1){
+			document.getElementById("hookUpgrade").style.display = "block"
+		}else{
+			document.getElementById("hookUpgrade").style.display = "none"
 		}
-	}else{
-		document.getElementById("battleStandard").style.display = "block"
-		document.getElementById("conquest").style.display = "none"
-		conquestLevel = 0
-	}
-}
-
-setInterval(prevnextUpdate, 10)
-function prevnextUpdate(){
-	if (questLevel == questPage){
-		document.getElementById("questsNext").disabled = true
-	}else{
-		document.getElementById("questsNext").disabled = false
-	}
-	if (questPage == 1){
-		document.getElementById("questsPrev").disabled = true
-	}else{
-		document.getElementById("questsPrev").disabled = false
-	}
-	if (conquestLevel == conquestPage){
-		document.getElementById("conquestNext").disabled = true
-	}else{
-		document.getElementById("conquestNext").disabled = false
-	}
-	if (conquestPage == 1){
-		document.getElementById("conquestPrev").disabled = true
-	}else{
-		document.getElementById("conquestPrev").disabled = false
-	}
-}
-
-setInterval(questDetailsUpdate, 10)
-function questDetailsUpdate(){
-	if (questPage == 1){
-		document.getElementById("questName").innerHTML = quest1.name
-		document.getElementById("questBriefing").innerHTML = quest1.briefing
-		document.getElementById("questRank").innerHTML = quest1.questRank
-		document.getElementById("questGoldReward").innerHTML = quest1.goldReward
-		document.getElementById("questFameReward").innerHTML = quest1.fameReward			
-	}
-	if (questPage == 2){
-		document.getElementById("questName").innerHTML = quest2.name
-		document.getElementById("questBriefing").innerHTML = quest2.briefing
-		document.getElementById("questRank").innerHTML = quest2.questRank
-		document.getElementById("questGoldReward").innerHTML = quest2.goldReward
-		document.getElementById("questFameReward").innerHTML = quest2.fameReward		
-	}
-	if (questPage == 3){
-		document.getElementById("questName").innerHTML = quest3.name
-		document.getElementById("questBriefing").innerHTML = quest3.briefing
-		document.getElementById("questRank").innerHTML = quest3.questRank
-		document.getElementById("questGoldReward").innerHTML = quest3.goldReward
-		document.getElementById("questFameReward").innerHTML = quest3.fameReward				
-	}
-	if (questPage == 4){
-		document.getElementById("questName").innerHTML = quest4.name
-		document.getElementById("questBriefing").innerHTML = quest4.briefing
-		document.getElementById("questRank").innerHTML = quest4.questRank
-		document.getElementById("questGoldReward").innerHTML = quest4.goldReward
-		document.getElementById("questFameReward").innerHTML = quest4.fameReward				
-	}
-	if (questPage == 5){
-		document.getElementById("questName").innerHTML = quest5.name
-		document.getElementById("questBriefing").innerHTML = quest5.briefing
-		document.getElementById("questRank").innerHTML = quest5.questRank
-		document.getElementById("questGoldReward").innerHTML = quest5.goldReward
-		document.getElementById("questFameReward").innerHTML = quest5.fameReward				
-	}	
-}
-
-setInterval(conquestDetailsUpdate, 10)
-function conquestDetailsUpdate(){
-	if (conquestPage == 1){
-		document.getElementById("conquestName").innerHTML = conquest1.name
-		document.getElementById("conquestDescription").innerHTML = conquest1.conquestDescription
-		document.getElementById("landReward").innerHTML = conquest1.landReward
-		document.getElementById("gloryReward").innerHTML = conquest1.gloryReward
-	}
-	if (conquestPage == 2){
-		document.getElementById("conquestName").innerHTML = conquest2.name
-		document.getElementById("conquestDescription").innerHTML = conquest2.conquestDescription
-		document.getElementById("landReward").innerHTML = conquest2.landReward
-		document.getElementById("gloryReward").innerHTML = conquest2.gloryReward
-	}
-	if (conquestPage == 3){
-		document.getElementById("conquestName").innerHTML = conquest3.name
-		document.getElementById("conquestDescription").innerHTML = conquest3.conquestDescription
-		document.getElementById("landReward").innerHTML = conquest3.landReward
-		document.getElementById("gloryReward").innerHTML = conquest3.gloryReward
-	}
-}
-
-setInterval(secondUpdate, 1000)
-function secondUpdate(){
-	gold += netGPS
-	wood += wps
-	stone += sps
-	if (gold <= 0){
-		gold = 0
-		soldiers = 0
-		lumberjacks.count = 0
-		miners.count = 0
-		nodeCreate("You have gone bankrupt. All of your people have left you.")
-	}
-	document.getElementById("goldDisplay").innerHTML = gold
-}
-
-function nodeCreate(text){
-	var para = document.createElement("p")
-	var node = document.createTextNode(text)
-	para.appendChild(node)
-
-	var element = document.getElementById("statusBox")
-	element.appendChild(para)
-    element.scrollTop = element.scrollHeight
-}
-
-function tabSelect(tabNo){
-	if (tabNo == 1 && stage >= 1){
-		document.getElementById("recruitTab").style.display = "block"
-		document.getElementById("questsTab").style.display = "none"
-		document.getElementById("conquestTab").style.display = "none"
-		document.getElementById("civilizationTab").style.display = "none"
-	}
-	if (tabNo == 2 && stage >= 2){
-		document.getElementById("recruitTab").style.display = "none"
-		document.getElementById("questsTab").style.display = "block"
-		document.getElementById("conquestTab").style.display = "none"
-		document.getElementById("civilizationTab").style.display = "none"
-	}
-	if (tabNo == 3 && stage >= 3){
-		document.getElementById("recruitTab").style.display = "none"
-		document.getElementById("questsTab").style.display = "none"
-		document.getElementById("conquestTab").style.display = "block"
-		document.getElementById("civilizationTab").style.display = "none"
-	}
-	if (tabNo == 4 && stage >= 4){
-		document.getElementById("recruitTab").style.display = "none"
-		document.getElementById("questsTab").style.display = "none"
-		document.getElementById("conquestTab").style.display = "none"
-		document.getElementById("civilizationTab").style.display = "block"
-	}
-}
-
-function quantityChange(){
-	if (quantityOption == 1){
-		quantityOption = 2
-		return
-	}
-	if (quantityOption == 2){
-		quantityOption = 3
-		return
-	}
-	if (quantityOption == 3){
-		quantityOption = 1
-		return
-	}
-}
-
-function buySoldier(){
-	for (i = 0; i < quantity; i++){
-		if (gold >= 50 && soldiers < maxSoldiers){
-			if (stage == 1){
-				stage = 2
-				nodeCreate("Maybe you should put your new soldier to some use...")
-			}
-			soldiers += 1
-			gold -= 50
-			updateValues()
-		}	
-	}
-}
-
-function fireSoldier(){
-	for (i= 0; i < quantity; i++){
-		if (soldiers > 0){
-			soldiers -= 1;
-			updateValues()
+		if (reel.level <= 1){
+			document.getElementById("reelUpgrade").style.display = "block"
+		}else{
+			document.getElementById("reelUpgrade").style.display = "none"
+		}
+		if (pole.level <= 1){
+			document.getElementById("poleUpgrade").style.display = "block"
+		}else{
+			document.getElementById("poleUpgrade").style.display = "none"
+		}
+		if (boat.level <= 0 && rodQuality >= 1){
+			document.getElementById("boatUpgrade").style.display = "block"
+		}else{
+			document.getElementById("boatUpgrade").style.display = "none"
 		}
 	}
-}
-
-function hireLumberjack(){
-	for (i= 0; i < quantity; i++){
-		if (gold >= 200){
-			lumberjacks.count += 1
-			gold -= 200
-			updateValues()
+	if (fishingSite == 2){
+		place = "Lochsummer"
+		document.getElementById("travel1Disabled").disabled = false
+		document.getElementById("travel2Disabled").disabled = true
+		document.getElementById("travel3Disabled").disabled = false
+		if (string.level <= 2){
+			document.getElementById("stringUpgrade").style.display = "block"
+		}else{
+			document.getElementById("stringUpgrade").style.display = "none"
 		}
-	}
-}
-
-function fireLumberjack(){
-	for (i= 0; i < quantity; i++){
-		if (lumberjacks.count > 0){
-			lumberjacks.count -= 1
-			updateValues()
-		}	
-	}
-}
-
-function hireMiner(){
-	for (i= 0; i < quantity; i++){
-		if (gold >= 200){
-			miners.count += 1
-			gold -= 200
-			updateValues()
+		if (hook.level <= 2){
+			document.getElementById("hookUpgrade").style.display = "block"
+		}else{
+			document.getElementById("hookUpgrade").style.display = "none"
+		}
+		if (reel.level <= 2){
+			document.getElementById("reelUpgrade").style.display = "block"
+		}else{
+			document.getElementById("reelUpgrade").style.display = "none"
+		}
+		if (pole.level <= 2){
+			document.getElementById("poleUpgrade").style.display = "block"
+		}else{
+			document.getElementById("poleUpgrade").style.display = "none"
+		}
+		if (boat.level <= 1){
+			document.getElementById("boatUpgrade").style.display = "block"
+		}else{
+			document.getElementById("boatUpgrade").style.display = "none"
 		}
 	}
 	
-}
-
-function fireMiner(){
-	for (i= 0; i < quantity; i++){
-		if (miners.count > 0){
-			miners.count -= 1
-			updateValues()
+	if (fishingSite == 3){
+		place = "Whiteshore"
+		document.getElementById("travel1Disabled").disabled = false
+		document.getElementById("travel2Disabled").disabled = false
+		document.getElementById("travel3Disabled").disabled = true
+		if (string.level <= 3){
+			document.getElementById("stringUpgrade").style.display = "block"
+		}else{
+			document.getElementById("stringUpgrade").style.display = "none"
 		}
+		if (hook.level <= 3){
+			document.getElementById("hookUpgrade").style.display = "block"
+		}else{
+			document.getElementById("hookUpgrade").style.display = "none"
+		}
+		if (reel.level <= 3){
+			document.getElementById("reelUpgrade").style.display = "block"
+		}else{
+			document.getElementById("reelUpgrade").style.display = "none"
+		}
+		if (pole.level <= 3){
+			document.getElementById("poleUpgrade").style.display = "block"
+		}else{
+			document.getElementById("poleUpgrade").style.display = "none"
+		}
+		/*/
+		if (boat.level <= 2){
+			document.getElementById("boatUpgrade").style.display = "block"
+		}else{
+			document.getElementById("boatUpgrade").style.display = "none"
+		}
+		/*/
 	}
 	
-}
-
-function buildTent(){
-	for (i= 0; i < quantity; i++){
-		if (wood >= 50 && stone >= 50 && landFree >= 2){
-			wood -= 50
-			stone -= 50
-			landUsed += 2
-			tents.count += 1
-			updateValues()
-		}
-	}
-}
-
-function buildLandlord(){
-	if (wood >= 100 && stone >= 100 && landFree >= 3){
-		wood -= 100
-		stone -= 100
-		landUsed += 3
-		landlord.level += 1
-		updateValues()
-	}
-}
-
-function questsPrev(){
-	questPage -= 1
-}
-
-function questsNext(){
-	questPage += 1
-}
-
-function conquestPrev(){
-	conquestPage -= 1
-}
-
-function conquestNext(){
-	conquestPage += 1
-}
-
-function win(){
-	if (battleType == "quest"){
-		if (initialQuestPage == 1){
-		gold += quest1.goldReward
-		fame += quest1.fameReward
-		nodeCreate("You recieved a reward of " + quest1.goldReward + " gold and " + quest1.fameReward + " fame.")
-		}
-		if (initialQuestPage == 2){
-			gold += quest2.goldReward
-			fame += quest2.fameReward
-			nodeCreate("You recieved a reward of " + quest2.goldReward + " gold and " + quest2.fameReward + " fame.")
-			
-		}
-		if (initialQuestPage == 3){
-			gold += quest3.goldReward
-			fame += quest3.fameReward
-			nodeCreate("You recieved a reward of " + quest3.goldReward + " gold and " + quest3.fameReward + " fame.")
-		}
-		if (initialQuestPage == 4){
-			gold += quest4.goldReward
-			fame += quest4.fameReward
-			nodeCreate("You recieved a reward of " + quest4.goldReward + " gold and " + quest4.fameReward + " fame.")
-		}
-		if (initialQuestPage == 5){
-			gold += quest5.goldReward
-			fame += quest5.fameReward
-			nodeCreate("You recieved a reward of " + quest5.goldReward + " gold and " + quest5.fameReward + " fame.")
-		}
-		inCombat = false
-	}
-	if (battleType == "conquest"){
-		if (initialConquestPage == 1){
-			land += conquest1.landReward
-			glory += conquest1.gloryReward
-			nodeCreate("You have captured " + conquest1.landReward + " land and " + conquest1.gloryReward + " glory.")
-			if (stage == 3){
-				stage = 4
-				nodeCreate("House more soldiers and expand your army.")
-			}
-		}
-		if (initialConquestPage == 2){
-			land += conquest2.landReward
-			glory += conquest2.gloryReward
-			nodeCreate("You have captured " + conquest2.landReward + " land and " + conquest2.gloryReward + " glory.")
-		}
-		if (initialConquestPage == 3){
-			land += conquest3.landReward
-			glory += conquest3.gloryReward
-			nodeCreate("You have captured " + conquest3.landReward + " land and " + conquest3.gloryReward + " glory.")
-		}
-		inCombat = false
-	}
-}
-
-function lose(){
-	nodeCreate("You have lost the battle.")
-	soldiers = 0
-	inCombat = false
-}
-
-function battle(type){
-	if (type == 1){
-		initialQuestPage = questPage
-		battleType = "quest"
-		if (initialQuestPage == 1){
-			enemySoldiers = 1
-			enemySoldierStats.hp = 1
-			enemySoldierStats.attack = 0.04
-		}
-		if (initialQuestPage == 2){
-			enemySoldiers = 2
-			enemySoldierStats.hp = 1
-			enemySoldierStats.attack = 0.06
-		}
-		if (initialQuestPage == 3){
-			enemySoldiers = 1
-			enemySoldierStats.hp = 3
-			enemySoldierStats.attack = 0.2
-		}
-		if (initialQuestPage == 4){
-			enemySoldiers = 5
-			enemySoldierStats.hp = 1.3
-			enemySoldierStats.attack = 0.15
-		}
-		if (initialQuestPage == 5){
-			enemySoldiers = 2
-			enemySoldierStats.hp = 10
-			enemySoldierStats.attack = 0.3
-		}
-	}
-	if (type == 2){
-		initialConquestPage = conquestPage
-		battleType = "conquest"
-		if (initialConquestPage == 1){
-			enemySoldiers = 10
-			enemySoldierStats.hp = 1
-			enemySoldierStats.attack = 0.04
-		}
-		if (initialConquestPage == 2){
-			enemySoldiers = 30
-			enemySoldierStats.hp = 1.5
-			enemySoldierStats.attack = 0.1
-		}
-		if (initialConquestPage == 3){
-			enemySoldiers = 100
-			enemySoldierStats.hp = 5
-			enemySoldierStats.attack = 0.3
-		}
-	}				
-	inCombat = true
-	battleHp = soldiers * soldierStats.hp
-	initialBattleHp = battleHp
-	soldiers = Math.ceil(battleHp / soldierStats.hp)
-	document.getElementById("battleSoldierDisplay").innerHTML = soldiers
-	document.getElementById("hpBar").style.width = ((battleHp / initialBattleHp) * 100) + "%"
 	
-	enemyBattleHp = enemySoldiers * enemySoldierStats.hp
-	enemyInitialBattleHp = enemyBattleHp
-	enemySoldiers = Math.ceil(enemyBattleHp / enemySoldierStats.hp)
-	document.getElementById("enemyBattleSoldierDisplay").innerHTML = enemySoldiers
-	document.getElementById("enemyHpBar").style.width = ((enemyBattleHp / enemyInitialBattleHp) * 100) + "%"
+	if (boat.level >= 1){
+		document.getElementById("boatBought").style.display = "block"
+	}else{
+		document.getElementById("boatBought").style.display = "none"
+	}
 	
-	var trigger = setInterval(battleMechanics, 1000)
-	function battleMechanics(){
-		if (inCombat == true){
-			enemyBattleHp -= soldierStats.attack * soldiers
-			enemySoldiers = Math.ceil(enemyBattleHp / enemySoldierStats.hp)
-			document.getElementById("enemyBattleSoldierDisplay").innerHTML = enemySoldiers
-			document.getElementById("enemyHpBar").style.width = ((enemyBattleHp / enemyInitialBattleHp) * 100) + "%"
-			if (enemyBattleHp <= 0 && inCombat == true){
-				win()
-				clearInterval(trigger)			
-			}
-		}
-		if (inCombat == true){
-			battleHp -= enemySoldierStats.attack * enemySoldiers
-			soldiers = Math.ceil(battleHp / soldierStats.hp)
-			document.getElementById("battleSoldierDisplay").innerHTML = soldiers
-			document.getElementById("hpBar").style.width = ((battleHp / initialBattleHp) * 100) + "%"
-			if (battleHp <= 0 && inCombat == true){
-				lose()
-				clearInterval(trigger)		
-			}	
-		}				
+	if (boat.level == 1){
+		document.getElementById("travel1Disabled").style.display = "block"
+		document.getElementById("travel2Disabled").style.display = "block"
+		document.getElementById("travel3Disabled").style.display = "none"
+	}else if (boat.level == 2){
+		document.getElementById("travel1Disabled").style.display = "block"
+		document.getElementById("travel2Disabled").style.display = "block"
+		document.getElementById("travel3Disabled").style.display = "block"
+	}
+	
+	if (string.level == 1){
+		string.price = 20
+	}else if (string.level == 2){
+		string.price = 300
+	}else if (string.level == 3){
+		string.price = 5000
+	}
+	
+	if (hook.level == 1){
+		hook.price = 50
+	}else if (hook.level == 2){
+		hook.price = 700
+	}else if (hook.level == 3){
+		hook.price = 10000
+	}
+	
+	if (reel.level == 1){
+		reel.price = 100
+	}else if (reel.level == 2){
+		reel.price = 1300
+	}else if (reel.level == 3){
+		reel.price = 17000
+	}
+	
+	if (pole.level == 1){
+		pole.price = 170
+	}else if (pole.level == 2){
+		pole.price = 2100
+	}else if (pole.level == 3){
+		pole.price = 26000
+	}
+	
+	if (boat.level == 0){
+		boat.price = 260
+	}else if (boat.level == 1){
+		boat.price = 3100
+	}else if (boat.level == 2){
+		boat.price = 37000
+	}
+	
+	if (fishingSite == 1){
+		document.getElementById("anglerBar").style.display = "none"
+		document.getElementById("schoolBar").style.display = "none"
+	}else if(fishingSite == 2){
+		document.getElementById("anglerBar").style.display = "block"
+		document.getElementById("schoolBar").style.display = "none"
+	}else if(fishingSite == 3){
+		document.getElementById("anglerBar").style.display = "none"
+		document.getElementById("schoolBar").style.display = "block"
+	}
+	
+	if (xp >= xpMax){
+		level += 1
+		sp += 1
+		xp = 0
+		xpMax = Math.round(xpMax * 1.3)
+	}
+	
+	if (enroled == false){
+		document.getElementById("enroled").style.display = "none"
+		document.getElementById("enrolMain").style.display = "block"
+	}else if (enroled == true){
+		document.getElementById("enroled").style.display = "block"
+		document.getElementById("enrolMain").style.display = "none"
+	}
+	
+	if (money < 5000){
+		document.getElementById("enrolButton").disabled = true
+	}else{
+		document.getElementById("enrolButton").disabled = false
+	}
+	
+	if (sp < neg.cost){
+		document.getElementById("negButton").disabled = true
+	}else{
+		document.getElementById("negButton").disabled = false
+	}
+	
+	if (sp < patience.cost){
+		document.getElementById("patienceButton").disabled = true
+	}else{
+		document.getElementById("patienceButton").disabled = false
+	}
+	
+	if (sp < frenzy.cost){
+		document.getElementById("frenzyButton").disabled = true
+	}else{
+		document.getElementById("frenzyButton").disabled = false
+	}
+	
+	if (sp < barrage.cost){
+		document.getElementById("barrageButton").disabled = true
+	}else{
+		document.getElementById("barrageButton").disabled = false
+	}
+	
+	rodQuality = (string.level / 4) + (hook.level / 4) + (reel.level / 4) + (pole.level / 4) - 1
+	fishingPower = string.level * hook.level * reel.level * pole.level
+	
+	neg.cost = neg.level + 1
+	patience.cost = (patience.level * 2) + 1
+	frenzy.cost = frenzy.level + 3
+	barrage.cost = barrage.level + 3
+	
+	neg.multiplier = 1 + (neg.level / 10)
+	patience.multiplier = patience.level / 10
+	frenzy.active = frenzy.level + 3
+	barrage.active = barrage.level + 3
+	
+	document.getElementById("money").innerHTML = money
+	document.getElementById("tinCanQuantity").innerHTML = tinCan.quantity
+	document.getElementById("rubberDuckQuantity").innerHTML = rubberDuck.quantity
+	document.getElementById("oldBootQuantity").innerHTML = oldBoot.quantity
+	document.getElementById("bassQuantity").innerHTML = bass.quantity
+	document.getElementById("tunaQuantity").innerHTML = tuna.quantity
+	document.getElementById("salmonQuantity").innerHTML = salmon.quantity
+	document.getElementById("pikeQuantity").innerHTML = pike.quantity
+	document.getElementById("swordfishQuantity").innerHTML = swordfish.quantity
+	document.getElementById("clownfishQuantity").innerHTML = clownfish.quantity
+	document.getElementById("eelQuantity").innerHTML = eel.quantity
+	document.getElementById("anglerfishQuantity").innerHTML = anglerfish.quantity
+	document.getElementById("squidQuantity").innerHTML = squid.quantity
+	
+	document.getElementById("stringLevel").innerHTML = string.level + 1
+	document.getElementById("hookLevel").innerHTML = hook.level + 1
+	document.getElementById("reelLevel").innerHTML = reel.level + 1
+	document.getElementById("poleLevel").innerHTML = pole.level + 1
+	document.getElementById("boatLevel").innerHTML = boat.level + 1
+	
+	document.getElementById("stringPrice").innerHTML = string.price
+	document.getElementById("hookPrice").innerHTML = hook.price
+	document.getElementById("reelPrice").innerHTML = reel.price
+	document.getElementById("polePrice").innerHTML = pole.price
+	document.getElementById("boatPrice").innerHTML = boat.price
+	
+	document.getElementById("lakeName").innerHTML = place
+	document.getElementById("storeName").innerHTML = place
+	
+	document.getElementById("tinCanValue").innerHTML = tinCan.value * tinCan.quantity
+	document.getElementById("rubberDuckValue").innerHTML = rubberDuck.value * rubberDuck.quantity
+	document.getElementById("oldBootValue").innerHTML = oldBoot.value * oldBoot.quantity
+	document.getElementById("bassValue").innerHTML = bass.value * bass.quantity
+	document.getElementById("tunaValue").innerHTML = tuna.value * tuna.quantity
+	document.getElementById("salmonValue").innerHTML = salmon.value * salmon.quantity
+	document.getElementById("pikeValue").innerHTML = pike.value * pike.quantity
+	document.getElementById("swordfishValue").innerHTML = swordfish.value * swordfish.quantity
+	document.getElementById("clownfishValue").innerHTML = clownfish.value * clownfish.quantity
+	document.getElementById("eelValue").innerHTML = eel.value * eel.quantity
+	document.getElementById("anglerfishValue").innerHTML = anglerfish.value * anglerfish.quantity
+	document.getElementById("squidValue").innerHTML = squid.value * squid.quantity
+	
+	document.getElementById("questReq").innerHTML = questReq
+	document.getElementById("questReward").innerHTML = questReward
+	document.getElementById("questObj").innerHTML = questObj
+	document.getElementById("questTimer").innerHTML = questTimer
+	
+	document.getElementById("fishingPower").innerHTML = fishingPower
+	
+	document.getElementById("level").innerHTML = level
+	document.getElementById("xp").innerHTML = xp
+	document.getElementById("xpMax").innerHTML = xpMax
+	document.getElementById("sp").innerHTML = sp
+	document.getElementById("xpBar").style.width = ((xp / xpMax) * 100) + "%"
+	
+	document.getElementById("negPrice").innerHTML = neg.cost
+	document.getElementById("patiencePrice").innerHTML = patience.cost
+	document.getElementById("frenzyPrice").innerHTML = frenzy.cost
+	document.getElementById("barragePrice").innerHTML = barrage.cost
+	
+	document.getElementById("negEffect").innerHTML = Math.round((neg.multiplier - 1) * 100)
+	document.getElementById("patienceEffect").innerHTML = Math.round(patience.multiplier * 100)
+	document.getElementById("frenzyEffect").innerHTML = frenzy.active
+	document.getElementById("barrageEffect").innerHTML = barrage.multiplier
+	
+	document.getElementById("negLevel").innerHTML = neg.level + 1
+	document.getElementById("patienceLevel").innerHTML = patience.level + 1
+	document.getElementById("frenzyLevel").innerHTML = frenzy.level + 1
+	document.getElementById("barrageLevel").innerHTML = barrage.level + 1
+	
+}, 10)
+
+document.getElementById("castLineButton").disabled = false
+document.getElementById("reelLineButton").disabled = true
+
+function castLine(){
+	line = "reel"
+	baited = false
+	document.getElementById("castLineButton").disabled = true
+	document.getElementById("reelLineButton").disabled = false
+	if (frenzy.activated == false){
+		flash1 = setTimeout(function(){
+		baited = true
+		reelStatus = 1
+		flash2 = setInterval(function(){
+				if (reelStatus == 1){
+					document.getElementById("reelLineButton").style.color = "black"
+					document.getElementById("reelLineButton").style.fontSize = "100%"
+					reelStatus = 2
+				}else if (reelStatus == 2){
+					document.getElementById("reelLineButton").style.color = "red"
+					document.getElementById("reelLineButton").style.fontSize = "110%" 
+					reelStatus = 1
+				}
+			}, 125)
+		}, (3000 + 4000 * Math.random()) * (1 - patience.multiplier))
+	}else{
+		baited = true
+		document.getElementById("reelLineButton").style.color = "red"
+		document.getElementById("reelLineButton").style.fontSize = "110%" 
 	}
 }
 
-function buyBattleStandard(){
-	if (gold >= 2500){
-		gold -= 2500
-		conquestUnlocked = true
+function reelLine(){
+	line = "cast"
+	if (baited == true){
+		fishCatch()
+		clearInterval(flash2)
+	}
+	clearInterval(flash1)
+	document.getElementById("reelLineButton").disabled = true
+	document.getElementById("castLineButton").disabled = false
+	document.getElementById("reelLineButton").style.color = "black"
+	document.getElementById("reelLineButton").style.fontSize = "100%" 
+}
+
+function fishCatch(){
+	fishChance = rodQuality + Math.random()
+	if (fishingSite == 1 && fishChance > 2){
+		fishChance = 2
+	}else if (fishingSite == 2 && fishChance > 3){
+		fishChance = 3
+	}else if (fishingSite == 3 && fishChance > 4){
+		fishChance = 4
+	}
+	if (fishChance > 0 && fishChance <= 0.34){
+		tinCan.quantity += 1
+	}
+	if (fishChance > 0.34 && fishChance <= 0.67){
+		rubberDuck.quantity += 1
+	}
+	if (fishChance > 0.67 && fishChance <= 1){
+		oldBoot.quantity += 1
+	}
+	if (fishChance > 1 && fishChance <= 1.34){
+		bass.quantity += 1
+	}
+	if (fishChance > 1.34 && fishChance <= 1.67){
+		tuna.quantity += 1
+	}
+	if (fishChance > 1.67 && fishChance <= 2){
+		salmon.quantity += 1
+	}
+	if (fishChance > 2 && fishChance <= 2.34){
+		pike.quantity += 1
+	}
+	if (fishChance > 2.34 && fishChance <= 2.67){
+		swordfish.quantity += 1
+	}
+	if (fishChance > 2.67 && fishChance <= 3){
+		clownfish.quantity += 1
+	}
+	if (fishChance > 3 && fishChance <= 3.34){
+		eel.quantity += 1
+	}
+	if (fishChance > 3.34 && fishChance <= 3.67){
+		anglerfish.quantity += 1
+	}
+	if (fishChance > 3.67 && fishChance <= 4){
+		squid.quantity += 1
+	}
+	if (enroled == true){
+		xp += 1 + Math.round(Math.random() * 4)
 	}
 }
+
+go(1)
+function go(place){
+	if (place == 1){
+		document.getElementById("area").style.display = "block"
+		document.getElementById("store").style.display = "none"
+		document.getElementById("fishingBoat").style.display = "none"
+		document.getElementById("angler").style.display = "none"
+		document.getElementById("school").style.display = "none"
+	}else if (place == 2){
+		document.getElementById("area").style.display = "none"
+		document.getElementById("store").style.display = "block"
+		document.getElementById("fishingBoat").style.display = "none"
+		document.getElementById("angler").style.display = "none"
+		document.getElementById("school").style.display = "none"
+	}else if (place == 3){
+		document.getElementById("area").style.display = "none"
+		document.getElementById("store").style.display = "none"
+		document.getElementById("fishingBoat").style.display = "block"
+		document.getElementById("angler").style.display = "none"
+		document.getElementById("school").style.display = "none"
+	}else if (place == 4){
+		document.getElementById("area").style.display = "none"
+		document.getElementById("store").style.display = "none"
+		document.getElementById("fishingBoat").style.display = "none"
+		document.getElementById("angler").style.display = "block"
+		document.getElementById("school").style.display = "none"
+	}else if (place == 5){
+		document.getElementById("area").style.display = "none"
+		document.getElementById("store").style.display = "none"
+		document.getElementById("fishingBoat").style.display = "none"
+		document.getElementById("angler").style.display = "none"
+		document.getElementById("school").style.display = "block"
+	}
+}
+
+function sell(fish){
+	if (fish == 1 && tinCan.quantity > 0){
+		money += tinCan.value * tinCan.quantity
+		tinCan.quantity = 0
+	}
+	if (fish == 2 && rubberDuck.quantity > 0){
+		money += rubberDuck.value * rubberDuck.quantity
+		rubberDuck.quantity = 0
+	}
+	if (fish == 3 && oldBoot.quantity > 0){
+		money += oldBoot.value * oldBoot.quantity
+		oldBoot.quantity = 0
+	}
+	if (fish == 4 && bass.quantity > 0){
+		money += bass.value * bass.quantity
+		bass.quantity = 0
+	}
+	if (fish == 5 && tuna.quantity > 0){
+		money += tuna.value * tuna.quantity
+		tuna.quantity = 0
+	}
+	if (fish == 6 && salmon.quantity > 0){
+		money += salmon.value * salmon.quantity
+		salmon.quantity = 0
+	}
+	if (fish == 7 && pike.quantity > 0){
+		money += pike.value * pike.quantity
+		pike.quantity = 0
+	}
+	if (fish == 8 && swordfish.quantity > 0){
+		money += swordfish.value * swordfish.quantity
+		swordfish.quantity = 0
+	}
+	if (fish == 9 && clownfish.quantity > 0){
+		money += clownfish.value * clownfish.quantity
+		clownfish.quantity = 0
+	}
+	if (fish == 10 && eel.quantity > 0){
+		money += eel.value * eel.quantity
+		eel.quantity = 0
+	}
+	if (fish == 11 && anglerfish.quantity > 0){
+		money += anglerfish.value * anglerfish.quantity
+		anglerfish.quantity = 0
+	}
+	if (fish == 12 && squid.quantity > 0){
+		money += squid.value * squid.quantity
+		squid.quantity = 0
+	}
+}
+
+function buy(upgrade){
+	if (upgrade == 1 && money >= string.price){
+		string.level += 1
+		money -= string.price
+	}
+	if (upgrade == 2 && money >= hook.price){
+		hook.level += 1
+		money -= hook.price
+	}
+	if (upgrade == 3 && money >= reel.price){
+		reel.level += 1
+		money -= reel.price
+	}
+	if (upgrade == 4 && money >= pole.price){
+		pole.level += 1
+		money -= pole.price
+	}
+	if (upgrade == 5 && money >= boat.price){
+		boat.level += 1
+		if (boat.level == 1){
+			questSet()
+		}
+		money -= boat.price
+	}
+}
+
+function travel(site){
+	if (site == 1){
+		fishingSite = 1
+	}
+	if (site == 2){
+		fishingSite = 2
+	}
+	if (site == 3){
+		fishingSite = 3
+	}
+}
+
+function questSet(){
+	questCountdown()
+	questReq = 3 + Math.round(2 * Math.random())
+	questChance = rodQuality + Math.random()
+	console.log(questChance)
+	if (questChance > 1 && questChance <= 1.34){
+		questObj = "bass"
+		questReward = bass.value * questReq * 2
+	}
+	if (questChance > 1.34 && questChance <= 1.67){
+		questObj = "tuna"
+		questReward = tuna.value * questReq * 2
+	}
+	if (questChance > 1.67 && questChance <= 2){
+		questObj = "salmon"
+		questReward = salmon.value * questReq * 2
+	}
+	if (questChance > 2 && questChance <= 2.34){
+		questObj = "pike"
+		questReward = pike.value * questReq * 2
+	}
+	if (questChance > 2.34 && questChance <= 2.67){
+		questObj = "swordfish"
+		questReward = swordfish.value * questReq * 2
+	}
+	if (questChance > 2.67 && questChance <= 3){
+		questObj = "clownfish"
+		questReward = clownfish.value * questReq * 2
+	}
+	if (questChance > 3 && questChance <= 3.34){
+		questObj = "pike"
+		questReward = eel.value * questReq * 2
+	}
+	if (questChance > 3.34 && questChance <= 3.67){
+		questObj = "swordfish"
+		questReward = anglerfish.value * questReq * 2
+	}
+	if (questChance > 3.67 && questChance <= 4){
+		questObj = "clownfish"
+		questReward = squid.value * questReq * 2
+	}
+}
+
+function questRedeem(){
+	if (questObj == "bass"){
+		if (bass.quantity >= questReq){
+			bass.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+		}
+	}
+	if (questObj == "tuna"){
+		if (tuna.quantity >= questReq){
+			tuna.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+		}
+	}
+	if (questObj == "salmon"){
+		if (salmon.quantity >= questReq){
+			salmon.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+		}
+	}
+	if (questObj == "pike"){
+		if (pike.quantity >= questReq){
+			pike.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+		}
+	}
+	if (questObj == "swordfish"){
+		if (swordfish.quantity >= questReq){
+			swordfish.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+		}
+	}
+	if (questObj == "clownfish"){
+		if (clownfish.quantity >= questReq){
+			clownfish.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+		}
+	}
+	if (questObj == "eel"){
+		if (eel.quantity >= questReq){
+			eel.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+		}
+	}
+	if (questObj == "anglerfish"){
+		if (anglerfish.quantity >= questReq){
+			anglerfish.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+		}
+	}
+	if (questObj == "squid"){
+		if (squid.quantity >= questReq){
+			squid.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+		}
+	}
+}
+
+function questCountdown(){
+	questTimer = 100
+	questInterval = setInterval(function(){
+		if (questTimer > 0){
+			questTimer -= 1
+		}else{
+			questSet()
+			clearInterval(questInterval)
+		}
+	}, 1000)
+}
+
+function enrol(){
+	if (money >= 1000){
+		money -= 1000
+		enroled = true
+	}
+}
+
+function negLearn(){
+	sp -= neg.cost
+	neg.level += 1
+}
+
+function patienceLearn(){
+	sp -= patience.cost
+	patience.level += 1
+}
+
+/*/
+function frenzyLearn(){
+	sp -= frenzy.cost
+	frenzy.level += 1
+}
+
+function barrageLearn(){
+	sp -= barrage.cost
+	barrage.level += 1
+}
+
+function frenzyActivate(){
+	frenzy.activated = true
+	document.getElementById("frenzyActivate").innerHTML = "Activated"
+	document.getElementById("frenzyActivate").disabled = true
+	setTimeout(function(){
+		frenzy.activated = false
+		document.getElementById("frenzyActivate").innerHTML = "Activate fishing frenzy"
+		frenzyCooldown()
+	}, 1000 * frenzy.active)
+}
+
+function frenzyCooldown(){
+	frenzy.timer = 5
+	frenzyTimer = setInterval(function(){
+		if (frenzyTimer > 0){
+			frenzyTimer -= 1
+		}else{
+			document.getElementById("frenzyActivate").disabled = false
+			clearInterval(frenzyTimer)
+		}
+	}, 1000)
+}
+/*/
+document.getElementById("activeHide").style.display = "none"

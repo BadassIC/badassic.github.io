@@ -1,33 +1,31 @@
 .left{
-	
-	float:left;
-	width: 460px
+	float: left;
+	clear: left;
 }
 
 .right{
 	float: right;
-
 }
 
-#statusbox{
+.button1{
 	width: 300px;
-    height: 200px;
-    overflow: auto;
-	float: right;
-}
-
-.normal{
-	width: 425px;
 	transition-duration: 0.4s;
 }
 
-.prevnext{
-	width: 210px;
-	transition-duration: 0.4s;
+.button2{
+	width: 148px;
+	transition-duration: 0.1s;
 }
 
-.big{
-	width: 425px;
-	height: 65px;
-	transition-duration: 0.4s;
+.position1{
+	float: left;
+	width:350px;
+}
+
+.w3-button{
+	color: w3-blue;
+}
+
+.w3-bar-item{
+	transition-duration: 0.2s;
 }

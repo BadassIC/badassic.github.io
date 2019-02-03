@@ -12,6 +12,9 @@
 			<button onClick="go(3)" class="w3-bar-item w3-button" id="boatBought">Fishing boat</button>
 			<button onClick="go(4)" class="w3-bar-item w3-button" id="anglerBar">Angler</button>
 			<button onClick="go(5)" class="w3-bar-item w3-button" id="schoolBar">Fishing school</button>
+			<button class="w3-bar-item w3-button" id="resetButton" style="float:right" onClick = "resetGame()">Reset</button>
+			<button class="w3-bar-item w3-button" id="levelNotif" style="float:right"><b>Level <span id="level2">3</span> (<span id="levelPercentage">46</span>%)</b></button>
+			<button class="w3-bar-item w3-button" id="questNotif" style="float:right" onClick="questRedeem()"><b><span id="questObj2">Salmon</span>: <span id="questCurrent">x</span>/<span id="questMax">5</span> (<span id="questTimer2">82</span>s)</b></button>
 		</div>
 		<div class="left">
 			<div id="area" class="w3-container">
@@ -22,10 +25,11 @@
 					<h2>Fish</h2>
 					<button class="w3-button button2" id="castLineButton" onClick="castLine()">Cast out line</button>
 					<button class="w3-button button2" id="reelLineButton" onClick="reelLine()">Reel in line</button>
-					<!--
-					<div id="frenzyDisplay"></br><button class="w3-button button1" id="frenzyActivate" onClick="frenzyActivate()">Activate fishing frenzy ()</button></div>
-					<div id="barrageDisplay"></br><button class="w3-button button1" id="barrageActivate" onClick="barrage()">Activate fishing barrage</button></div>
-					-->
+					<br></br>
+					<div class="w3-light-grey" style="width:300px">		
+							<div id="fishBar" class="w3-blue w3-center" style="height:39px;width:20%"></div>
+					</div>
+					<h2 id="fishBarText">Perfect!</h2>
 				</div>
 			</div>
 			<div id="store" class="w3-container">
@@ -58,10 +62,23 @@
 			<div id="fishingBoat" class="w3-container">
 				<h2>Fishing boat</h2>
 				<div>Travel to different places to catch better fish and buy better equipment.</div>
-				</br>
-				<div id="travel1"><button id="travel1Disabled" class="w3-button button1" onClick="travel(1)">Travel to Hedgefield</button></br></div>
-				<div id="travel2"><button id="travel2Disabled" class="w3-button button1" onClick="travel(2)">Travel to Lochsummer</button></br></div>
-				<div id="travel3"><button id="travel3Disabled" class="w3-button button1" onClick="travel(3)">Travel to Whiteshore</button></br></div>
+				<div class="position1">
+					<h2>Travel</h2>
+					<div id="travel1"><button id="travel1Disabled" class="w3-button button1" onClick="travel(1)">Travel to Hedgefield</button></br></div>
+					<div id="travel2"><button id="travel2Disabled" class="w3-button button1" onClick="travel(2)">Travel to Lochsummer</button></br></div>
+					<div id="travel3"><button id="travel3Disabled" class="w3-button button1" onClick="travel(3)">Travel to Whiteshore</button></br></div>
+				</div>
+				<div class="position1">
+					<h2 style="display:inline-block;margin-right:10px;">Fishing net</h2>
+					<button class="w3-button button1" id="installNet" onClick="installNet()">Install net ($100)</button>
+					<span id="netContent">
+						<span id="netCapacityShow"><b id="netCapacity2"></b><span id="netQuantity">4</span>/<span id="netMax">10</span></span>
+						</br>
+						<button class="w3-button button1" id="emptyNet" onClick="emptyNet()">Empty net </button>
+						<br></br>
+						<button class="w3-button button1" id="upgradeNet" onClick="upgradeNet()">Buy net level <span id="netLevel">2</span> ($<span id="netPrice">200</span>)</button>
+					</span>
+				</div>
 			</div>
 			<div id="angler" class="w3-container">
 				<h2>Angler</h2>
@@ -89,14 +106,7 @@
 						<button onClick="negLearn()" id="negButton" class="w3-button button1">Learn negotiating lvl <span id="negLevel">1</span> (<span id="negPrice"></span>SP)</button>
 						<div class="w3-padding-8">Increases money received from selling fish by 10%. Current increase: <b id="negEffect"></b>%</div>
 						<button onClick="patienceLearn()" id="patienceButton" class="w3-button button1">Learn patience lvl <span id="patienceLevel">1</span> (<span id="patiencePrice">5</span>SP)</button>
-						<div class="w3-padding-8">Decreases the minimum/maximum waiting time for catching fish by 10%. Current decrease: <b id="patienceEffect">0.5</b>%</div>
-						<span id="activeHide">
-							<h2>Active skills</h2>
-							<button onClick="frenzyLearn()" id="frenzyButton" class="w3-button button1">Learn fishing frenzy lvl <span id="frenzyLevel">1</span> (<span id="frenzyPrice">5</span>SP)</button>
-							<div class="w3-padding-8">An active ability which lets you catch fish without any waiting time for a brief moment. Current active: <b id="frenzyEffect">3</b> seconds</div>
-							<button onClick="barrageLearn()" id="barrageButton" class="w3-button button1">Learn fishing barrage lvl <span id="barrageLevel">1</span> (<span id="barragePrice">5</span>SP)</button>
-							<div class="w3-padding-8">An active ability which lets your next reel in catch multiple fish. Current active: <b id="barrageEffect">3</b>x</div>
-						</span>
+						<div class="w3-padding-8">Decreases the waiting time for catching fish by 10%. Current decrease: <b id="patienceEffect">0.5</b>%</div>
 					</div>
 					<div class="position1" style="width: 300px">
 	

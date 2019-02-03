@@ -869,7 +869,7 @@ function castLine(){
 				fishBarValue -= 5
 				console.log("2")
 			}
-		}, 5)
+		}, 15)
 		castStatus = 2
 	} else if(castStatus == 2){
 		setTimeout(function(){

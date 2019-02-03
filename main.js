@@ -752,7 +752,7 @@ setInterval(function(){
 	}
 	
 	if (questObjMet == 1){
-			document.getElementById("questNotif").style.color = "#00ff00"
+		document.getElementById("questNotif").style.color = "#00ff00"
 	}else{
 		document.getElementById("questNotif").style.color = "white"
 	}
@@ -869,7 +869,7 @@ function castLine(){
 				fishBarValue -= 5
 				console.log("2")
 			}
-		}, 10)
+		}, 5)
 		castStatus = 2
 	} else if(castStatus == 2){
 		setTimeout(function(){

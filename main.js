@@ -150,6 +150,8 @@ squid = {
 	net: 0
 }
 
+netBarValue = 0
+
 function save(){
 	var save = {
 		money: money,
@@ -801,7 +803,7 @@ setInterval(function(){
 		document.getElementById("upgradeNet").disabled = false
 	}
 	
-	if (money < 100){
+	if (money < 50){
 		document.getElementById("installNet").disabled = true
 	}else{
 		document.getElementById("installNet").disabled = false
@@ -848,6 +850,72 @@ setInterval(function(){
 		questReward = squid.value * questReq * 2
 	}
 	
+	document.getElementById("netBar").style.width = ((netBarValue / 150) * 100) + "%"
+	
+	if (netBarValue >= 150){
+		netBarValue = 0
+		if (net.installed == true && net.quantity < net.max){
+			fishChance = rodQuality + Math.random() - 0.25
+			if (fishingSite == 1 && fishChance > 2){
+				fishChance = 2
+			}else if (fishingSite == 2 && fishChance > 3){
+				fishChance = 3
+			}else if (fishingSite == 3 && fishChance > 4){
+				fishChance = 4
+			}
+			if (fishChance < 0){
+				fishChance = 0
+			}
+			if (fishChance >= 0 && fishChance <= 0.34){
+				tinCan.net += 1
+				console.log("tinCan")
+			}
+			if (fishChance > 0.34 && fishChance <= 0.67){
+				rubberDuck.net += 1
+				console.log("rubberDuck")
+			}
+			if (fishChance > 0.67 && fishChance <= 1){
+				oldBoot.net += 1
+				console.log("oldBoot")
+			}
+			if (fishChance > 1 && fishChance <= 1.34){
+				bass.net += 1
+				console.log("bass")
+			}
+			if (fishChance > 1.34 && fishChance <= 1.67){
+				tuna.net += 1
+				console.log("tuna")
+			}
+			if (fishChance > 1.67 && fishChance <= 2){
+				salmon.net += 1
+				console.log("salmon")
+			}
+			if (fishChance > 2 && fishChance <= 2.34){
+				pike.net += 1
+				console.log("pike")
+			}
+			if (fishChance > 2.34 && fishChance <= 2.67){
+				swordfish.net += 1
+				console.log("swordfish")
+			}
+			if (fishChance > 2.67 && fishChance <= 3){
+				clownfish.net += 1
+				console.log("clownfish")
+			}
+			if (fishChance > 3 && fishChance <= 3.34){
+				eel.net += 1
+				console.log("eel")
+			}
+			if (fishChance > 3.34 && fishChance <= 3.67){
+				anglerfish.net += 1
+				console.log("anglerfish")
+			}
+			if (fishChance > 3.67 && fishChance <= 4){
+				squid.net += 1
+				console.log("squid")
+			}
+		}
+	}
 }, 10)
 
 document.getElementById("castLineButton").disabled = false
@@ -1270,12 +1338,13 @@ function patienceLearn(){
 }
 
 function installNet(){
-	if (money >= 100){
-		money -= 100
+	if (money >= 50){
+		money -= 50
 		net.installed = true
 	}
 }
 
+/*/
 setInterval(function(){
 	if (net.installed == true && net.quantity < net.max){
 		fishChance = rodQuality + Math.random() - 0.25
@@ -1339,6 +1408,7 @@ setInterval(function(){
 		}
 	}
 }, 15000)
+/*/
 
 function emptyNet(){
 	tinCan.quantity += tinCan.net
@@ -1378,3 +1448,11 @@ function resetGame(){
 	localStorage.removeItem("save")
 	location.reload()
 }
+
+setInterval(function(){
+	if (net.quantity < net.max){
+		netBarValue += 1
+	}else{
+		netBarValue = 0
+	}
+}, 100)

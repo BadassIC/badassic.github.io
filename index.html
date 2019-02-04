@@ -31,6 +31,21 @@
 					</div>
 					<h2 id="fishBarText">Perfect!</h2>
 				</div>
+				<div class="position1">
+					<h2 style="display:inline-block;margin-right:10px;">Fishing net</h2>
+					<button class="w3-button button1" id="installNet" onClick="installNet()">Install net ($50)</button>
+					<span id="netContent">
+						<div class="w3-light-grey" style="width:300px">		
+								<div id="netBar" class="w3-blue w3-center" style="height:39px;width:20%"></div>
+						</div>
+						</br>
+						<span id="netCapacityShow"><b id="netCapacity2"></b><span id="netQuantity">4</span>/<span id="netMax">10</span></span>
+						</br>
+						<button class="w3-button button1" id="emptyNet" onClick="emptyNet()">Empty net </button>
+						<br></br>
+						<button class="w3-button button1" id="upgradeNet" onClick="upgradeNet()">Buy net level <span id="netLevel">2</span> ($<span id="netPrice">200</span>)</button>
+					</span>
+				</div>
 			</div>
 			<div id="store" class="w3-container">
 				<h2><span id="storeName"></span> Store</h2>
@@ -69,15 +84,7 @@
 					<div id="travel3"><button id="travel3Disabled" class="w3-button button1" onClick="travel(3)">Travel to Whiteshore</button></br></div>
 				</div>
 				<div class="position1">
-					<h2 style="display:inline-block;margin-right:10px;">Fishing net</h2>
-					<button class="w3-button button1" id="installNet" onClick="installNet()">Install net ($100)</button>
-					<span id="netContent">
-						<span id="netCapacityShow"><b id="netCapacity2"></b><span id="netQuantity">4</span>/<span id="netMax">10</span></span>
-						</br>
-						<button class="w3-button button1" id="emptyNet" onClick="emptyNet()">Empty net </button>
-						<br></br>
-						<button class="w3-button button1" id="upgradeNet" onClick="upgradeNet()">Buy net level <span id="netLevel">2</span> ($<span id="netPrice">200</span>)</button>
-					</span>
+					
 				</div>
 			</div>
 			<div id="angler" class="w3-container">

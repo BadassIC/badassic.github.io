@@ -1,18 +1,28 @@
 <html>
 	<head>
 		<div class="w3-container">
+			<title>Incremental Fishing</title>
 			<h1 class="left">Incremental Fishing</h1>
 			<h1 class="right">$<span id="money">1515</span></h1>
 		</div>
 	</head>
-	<body>
-		<div class="w3-bar w3-blue">
+	<body id="body" class="body dark-mode; w3-theme-black">
+		<div class="w3-bar w3-dark-grey">
 			<button onClick="go(1)" class="w3-bar-item w3-button">Lake</button>
 			<button onClick="go(2)" class="w3-bar-item w3-button">Store</button>
-			<button onClick="go(3)" class="w3-bar-item w3-button" id="boatBought">Fishing boat</button>
+			<button onClick="go(3)" class="w3-bar-item w3-button" id="boatBar"><div id="boatBought">Fishing boat</div></button>
 			<button onClick="go(4)" class="w3-bar-item w3-button" id="anglerBar">Angler</button>
 			<button onClick="go(5)" class="w3-bar-item w3-button" id="schoolBar">Fishing school</button>
-			<button class="w3-bar-item w3-button" id="resetButton" style="float:right" onClick = "resetGame()">Reset</button>
+			<button onClick="go(6)" class="w3-bar-item w3-button" id="retireBar">Retirement home</button>
+			<button onClick="go(7)" class="w3-bar-item w3-button" id="masterBar">Master</button>
+			<div style="float: right" class="w3-dropdown-hover">
+				<button class="w3-button">Settings</button>
+				<div class="w3-dark-grey w3-dropdown-content w3-bar-block" style="">
+				  <a href="#" class="w3-bar-item w3-button" onClick="save()">Save</a>
+				  <a href="#" class="w3-bar-item w3-button" onClick="resetGame()">Reset</a>
+				  <!--<a href="#" class="w3-bar-item w3-button" onClick="toggleDark()">Light off</a>-->
+				</div>
+			</div>
 			<button class="w3-bar-item w3-button" id="levelNotif" style="float:right"><b>Level <span id="level2">3</span> (<span id="levelPercentage">46</span>%)</b></button>
 			<button class="w3-bar-item w3-button" id="questNotif" style="float:right" onClick="questRedeem()"><b><span id="questObj2">Salmon</span>: <span id="questCurrent">x</span>/<span id="questMax">5</span> (<span id="questTimer2">82</span>s)</b></button>
 		</div>
@@ -27,23 +37,24 @@
 					<button class="w3-button button2" id="reelLineButton" onClick="reelLine()">Reel in line</button>
 					<br></br>
 					<div class="w3-light-grey" style="width:300px">		
-							<div id="fishBar" class="w3-blue w3-center" style="height:39px;width:20%"></div>
+						<div id="fishBar" class="w3-blue w3-center" style="height:39px;width:20%"></div>
 					</div>
 					<h2 id="fishBarText">Perfect!</h2>
+					<h2 id="fishCaughtText">Tin can!</h2>
 				</div>
 				<div class="position1">
 					<h2 style="display:inline-block;margin-right:10px;">Fishing net</h2>
-					<button class="w3-button button1" id="installNet" onClick="installNet()">Install net ($50)</button>
+					<button class="w3-button button1" id="installNet" onClick="installNet()">Net level 1 ($25)</button>
 					<span id="netContent">
 						<div class="w3-light-grey" style="width:300px">		
-								<div id="netBar" class="w3-blue w3-center" style="height:39px;width:20%"></div>
+							<div id="netBar" class="w3-blue w3-center" style="height:39px;width:20%"></div>
 						</div>
 						</br>
 						<span id="netCapacityShow"><b id="netCapacity2"></b><span id="netQuantity">4</span>/<span id="netMax">10</span></span>
 						</br>
 						<button class="w3-button button1" id="emptyNet" onClick="emptyNet()">Empty net </button>
 						<br></br>
-						<button class="w3-button button1" id="upgradeNet" onClick="upgradeNet()">Buy net level <span id="netLevel">2</span> ($<span id="netPrice">200</span>)</button>
+						<button class="w3-button button1" id="upgradeNet" onClick="upgradeNet()">Net level <span id="netLevel">2</span> ($<span id="netPrice">200</span>)</button>
 					</span>
 				</div>
 			</div>
@@ -52,36 +63,43 @@
 				<div>Sell fish and buy upgrades.</div>
 				<div class="position1">
 					<h2>Sell</h2>
-					<div id="tinCanSell"><button class="w3-button button1" onClick="sell(1)">Sell tin cans ($<span id="tinCanValue"></span>)</button><br></br></div>
-					<div id="rubberDuckSell"><button class="w3-button button1" onClick="sell(2)">Sell rubber ducks ($<span id="rubberDuckValue"></span>)</button><br></br></div>
-					<div id="oldBootSell"><button class="w3-button button1" onClick="sell(3)">Sell old boots ($<span id="oldBootValue"></span>)</button><br></br></div>
-					<div id="bassSell"><button class="w3-button button1" onClick="sell(4)">Sell bass ($<span id="bassValue"></span>)</button><br></br></div>
-					<div id="tunaSell"><button class="w3-button button1" onClick="sell(5)">Sell tuna ($<span id="tunaValue"></span>)</button><br></br></div>
-					<div id="salmonSell"><button class="w3-button button1" onClick="sell(6)">Sell salmon ($<span id="salmonValue"></span>)</button><br></br></div>
-					<div id="pikeSell"><button class="w3-button button1" onClick="sell(7)">Sell pike ($<span id="pikeValue"></span>)</button><br></br></div>
-					<div id="swordfishSell"><button class="w3-button button1" onClick="sell(8)">Sell swordfish ($<span id="swordfishValue"></span>)</button><br></br></div>
-					<div id="clownfishSell"><button class="w3-button button1" onClick="sell(9)">Sell clownfish ($<span id="clownfishValue"></span>)</button><br></br></div>
-					<div id="eelSell"><button class="w3-button button1" onClick="sell(10)">Sell eel ($<span id="eelValue"></span>)</button><br></br></div>
-					<div id="anglerfishSell"><button class="w3-button button1" onClick="sell(11)">Sell anglerfish ($<span id="anglerfishValue"></span>)</button><br></br></div>
-					<div id="squidSell"><button class="w3-button button1" onClick="sell(12)">Sell squid ($<span id="squidValue"></span>)</button><br></br></div>
+					<div id="tinCanSell"><button class="w3-button button1" onClick="sell(1)">Tin cans ($<span id="tinCanValue"></span>)</button><br></br></div>
+					<div id="rubberDuckSell"><button class="w3-button button1" onClick="sell(2)">Rubber ducks ($<span id="rubberDuckValue"></span>)</button><br></br></div>
+					<div id="oldBootSell"><button class="w3-button button1" onClick="sell(3)">Old boots ($<span id="oldBootValue"></span>)</button><br></br></div>
+					<div id="bassSell"><button class="w3-button button1" onClick="sell(4)">Bass ($<span id="bassValue"></span>)</button><br></br></div>
+					<div id="tunaSell"><button class="w3-button button1" onClick="sell(5)">Tuna ($<span id="tunaValue"></span>)</button><br></br></div>
+					<div id="salmonSell"><button class="w3-button button1" onClick="sell(6)">Salmon ($<span id="salmonValue"></span>)</button><br></br></div>
+					<div id="pikeSell"><button class="w3-button button1" onClick="sell(7)">Pike ($<span id="pikeValue"></span>)</button><br></br></div>
+					<div id="swordfishSell"><button class="w3-button button1" onClick="sell(8)">Swordfish ($<span id="swordfishValue"></span>)</button><br></br></div>
+					<div id="clownfishSell"><button class="w3-button button1" onClick="sell(9)">Clownfish ($<span id="clownfishValue"></span>)</button><br></br></div>
+					<div id="eelSell"><button class="w3-button button1" onClick="sell(10)">Eel ($<span id="eelValue"></span>)</button><br></br></div>
+					<div id="anglerfishSell"><button class="w3-button button1" onClick="sell(11)">Anglerfish ($<span id="anglerfishValue"></span>)</button><br></br></div>
+					<div id="squidSell"><button class="w3-button button1" onClick="sell(12)">Squid ($<span id="squidValue"></span>)</button><br></br></div>
+					<div id="dolphinSell"><button class="w3-button button1" onClick="sell(13)">Dolphin ($<span id="dolphinValue"></span>)</button><br></br></div>
+					<div id="octopusSell"><button class="w3-button button1" onClick="sell(14)">Octopus ($<span id="octopusValue"></span>)</button><br></br></div>
+					<div id="sharkSell"><button class="w3-button button1" onClick="sell(15)">Shark ($<span id="sharkValue"></span>)</button><br></br></div>
 				</div>
 				<div class="position1">
 					<h2>Buy</h2>
-					<div id="stringUpgrade"><button id="stringDisabled" class="w3-button button1" onClick="buy(1)">Buy string level <span id="stringLevel"></span> ($<span id="stringPrice"></span>)</button><br></br></div>
-					<div id="hookUpgrade"><button id="hookDisabled" class="w3-button button1" onClick="buy(2)">Buy hook level <span id="hookLevel"></span> ($<span id="hookPrice"></span>)</button><br></br></div>
-					<div id="reelUpgrade"><button id="reelDisabled" class="w3-button button1" onClick="buy(3)">Buy reel level <span id="reelLevel"></span> ($<span id="reelPrice"></span>)</button><br></br></div>
-					<div id="poleUpgrade"><button id="poleDisabled" class="w3-button button1" onClick="buy(4)">Buy pole level <span id="poleLevel"></span> ($<span id="polePrice"></span>)</button><br></br></div>
-					<div id="boatUpgrade"><button id="boatDisabled" class="w3-button button1" onClick="buy(5)">Buy boat level <span id="boatLevel"></span> ($<span id="boatPrice"></span>)</button><br></br></div>
+					<div id="stringUpgrade"><button id="stringDisabled" class="w3-button button1" onClick="buy(1)">String level <span id="stringLevel"></span> ($<span id="stringPrice"></span>)</button><br></br></div>
+					<div id="hookUpgrade"><button id="hookDisabled" class="w3-button button1" onClick="buy(2)">Hook level <span id="hookLevel"></span> ($<span id="hookPrice"></span>)</button><br></br></div>
+					<div id="reelUpgrade"><button id="reelDisabled" class="w3-button button1" onClick="buy(3)">Reel level <span id="reelLevel"></span> ($<span id="reelPrice"></span>)</button><br></br></div>
+					<div id="poleUpgrade"><button id="poleDisabled" class="w3-button button1" onClick="buy(4)">Pole level <span id="poleLevel"></span> ($<span id="polePrice"></span>)</button><br></br></div>
+					<div id="boatUpgrade"><button id="boatDisabled" class="w3-button button1" onClick="buy(5)">Boat level <span id="boatLevel"></span> ($<span id="boatPrice"></span>)</button><br></br></div>
 				</div>		
 			</div>
 			<div id="fishingBoat" class="w3-container">
-				<h2>Fishing boat</h2>
-				<div>Travel to different places to catch better fish and buy better equipment.</div>
+				<h2 id="boatTitle">Fishing boat</h2>
+				<div id="boatDescription">Travel to different places to catch better fish and buy better equipment.</div>
 				<div class="position1">
-					<h2>Travel</h2>
-					<div id="travel1"><button id="travel1Disabled" class="w3-button button1" onClick="travel(1)">Travel to Hedgefield</button></br></div>
-					<div id="travel2"><button id="travel2Disabled" class="w3-button button1" onClick="travel(2)">Travel to Lochsummer</button></br></div>
-					<div id="travel3"><button id="travel3Disabled" class="w3-button button1" onClick="travel(3)">Travel to Whiteshore</button></br></div>
+					<h2 id="boatSubTitle">Travel</h2>
+					<button id="repairBoat" class="w3-button button1" onClick="repairBoat()">Repair boat ($250)</button>
+					<span id="travelContent">
+						<div id="travel1"><button id="travel1Disabled" class="w3-button button1" onClick="travel(1)">Travel to Hedgefield</button></br></div>
+						<div id="travel2"><button id="travel2Disabled" class="w3-button button1" onClick="travel(2)">Travel to Lochsummer</button></br></div>
+						<div id="travel3"><button id="travel3Disabled" class="w3-button button1" onClick="travel(3)">Travel to Whiteshore</button></br></div>
+						<div id="travel4"><button id="travel4Disabled" class="w3-button button1" onClick="travel(4)">Travel to Greybarrow</button></br></div>
+					</span>
 				</div>
 				<div class="position1">
 					
@@ -90,12 +108,10 @@
 			<div id="angler" class="w3-container">
 				<h2>Angler</h2>
 				<div>Complete the angler's quests for huge rewards.</div>
-				<div class="w3-panel w3-blue w3-card" style=" width: 335px">
-					<h2>Quest (<span id="questTimer">17</span>)</h2>
-					<div>Catch <span id="questReq">5</span> <span id="questObj">salmon</span>.</div>
-					<div>Reward: $<span id="questReward">500</span></div>
-					<button class="w3-section w3-button button1" onClick="questRedeem()">Redeem</button>
-				</div>
+				<h2>Quest (<span id="questTimer">17</span>)</h2>
+				<div>Catch <span id="questReq">5</span> <span id="questObj">salmon</span>.</div>
+				<div>Reward: $<span id="questReward">500</span></div>
+				<button class="w3-section w3-button button1" onClick="questRedeem()">Redeem</button>
 			</div>
 			<div id="school" class="w3-container">
 				<h2>Fishing school</h2>
@@ -103,22 +119,59 @@
 				<div id="enrolMain"></br><button id="enrolButton" onClick="enrol()" class="w3-button button1">Enrol in fishing course ($1000)</button></div>
 				<div id="enroled">
 					<div class="position1">
+						<div><b>Skill points: </b><span id="skillpoints"></span></div>
 						<h2 style="display:inline-block;margin-right:10px;">Level <span id="level">1</span></h2>
 						<div style="display:inline-block"><b>XP: </b><span id="xp">2</span>/<span id="xpMax">10</span></div>
 						<div style="display:inline-block"><b>SP: </b><span id="sp">0</span></div>
 						<div class="w3-light-grey" style="width:300">		
 							<div id="xpBar" class="w3-blue" style="height:39px;width:20%"></div>
 						</div>
-						<h2>Passive skills</h2>
-						<button onClick="negLearn()" id="negButton" class="w3-button button1">Learn negotiating lvl <span id="negLevel">1</span> (<span id="negPrice"></span>SP)</button>
+						<h2>Economics</h2>
+						<button onClick="negLearn()" id="negButton" class="w3-button button1">Negotiating level <span id="negLevel">1</span> (<span id="negPrice"></span>SP)</button>
 						<div class="w3-padding-8">Increases money received from selling fish by 10%. Current increase: <b id="negEffect"></b>%</div>
-						<button onClick="patienceLearn()" id="patienceButton" class="w3-button button1">Learn patience lvl <span id="patienceLevel">1</span> (<span id="patiencePrice">5</span>SP)</button>
-						<div class="w3-padding-8">Decreases the waiting time for catching fish by 10%. Current decrease: <b id="patienceEffect">0.5</b>%</div>
+						<span id="tier2Economics">
+							<button onClick="barteringLearn()" id="barteringButton" class="w3-button button1">Bartering level <span id="barteringLevel">1</span> (<span id="barteringPrice">3</span>SP)</button>
+							<div class="w3-padding-8">Decreases the cost of store items. Current decrease: <b id="barteringEffect"></b>%</div>
+						</span>
 					</div>
 					<div class="position1" style="width: 300px">
-	
+						</br>
+						<h2>Fishing</h2>
+						<button onClick="patienceLearn()" id="patienceButton" class="w3-button button1">Patience level <span id="patienceLevel">1</span> (<span id="patiencePrice">5</span>SP)</button>
+						<div class="w3-padding-8">Decreases the waiting time for catching fish by 10%. Current decrease: <b id="patienceEffect">0.5</b>%</div>
+						<span id="tier2Fishing">
+							<button onClick="managementLearn()" id="managementButton" class="w3-button button1">Net management level <span id="managementLevel">1</span> (<span id="managementPrice">3</span>SP)</button>
+							<div class="w3-padding-8">Decreases the waiting time for your net to catch a fish. Current decrease: <b id="managementEffect">0</b>%</div>
+						</span>
 					</div>				
 				</div>
+			</div>
+			<div id="retire" class="w3-container">
+				<h2>Retirement home</h2>
+				<div>Retire from your fishing career in hopes of an apprentice who will succeed you.</div>
+				<div style="width: 300px">
+					<h2>Retire</h2>
+					<button class="w3-button button1" onClick="retire()">Retire</button>
+					<div class="w3-padding-8">Retiring will reset your progress and grant you <b id="fishPointsOnReset">256</b> fish points.</div>
+				</div>
+			</div>
+			<div id="master" class="w3-container">
+				<h2>Master</h2>
+				<div>Learn formidable skills from your predecessor.</div>
+				<div><b>Fish points:</b> <span id="fishPoints">256</span></div>
+				<h2>Skills</h2>
+				<span id="scholarship">
+					<button class="w3-button button1" onClick="scholarshipLearn()" id="scholarshipButton">Scholarship (5FP)</button>
+					<div class="w3-padding-8">Grants early access to fishing school.</div>
+				</span>
+				<span id="fastLearner">
+					<button class="w3-button button1" onClick="fastLearnerLearn()" id="fastLearnerButton">Fast learner (10FP)</button>
+					<div class="w3-padding-8">XP gain is multiplied by 2.</div>
+				</span>
+				<span id="library">
+					<button class="w3-button button1" onClick="libraryLearn()" id="libraryButton">Library (200FP)</button>
+					<div class="w3-padding-8">Unlocks tier 2 skills in fishing school.</div>
+				</span>
 			</div>
 		</div>
 		<div class="right">
@@ -138,15 +191,15 @@
 						<td id="oldBootQuantity">0</td>
 					</tr>
 					<tr id="bassRow">
-						<td class="w3-text-dark-gray"><b>Bass</b><td>
+						<td class=""><b>Bass</b><td>
 						<td id="bassQuantity">0</td>
 					</tr>
 					<tr id="tunaRow">
-						<td class="w3-text-dark-gray"><b>Tuna</b><td>
+						<td class=""><b>Tuna</b><td>
 						<td id="tunaQuantity">0</td>
 					</tr>
 					<tr id="salmonRow">
-						<td class="w3-text-dark-gray"><b>Salmon</b><td>
+						<td class=""><b>Salmon</b><td>
 						<td id="salmonQuantity">0</td>
 					</tr>
 					<tr id="pikeRow">
@@ -172,6 +225,18 @@
 					<tr id="squidRow">
 						<td class="w3-text-teal"><b>Squid</b><td>
 						<td id="squidQuantity">0</td>
+					</tr>
+					<tr id="dolphinRow">
+						<td class="w3-text-blue"><b>Dolphin</b><td>
+						<td id="dolphinQuantity">0</td>
+					</tr>
+					<tr id="octopusRow">
+						<td class="w3-text-blue"><b>Octopus</b><td>
+						<td id="octopusQuantity">0</td>
+					</tr>
+					<tr id="sharkRow">
+						<td class="w3-text-blue"><b>Shark</b><td>
+						<td id="sharkQuantity">0</td>
 					</tr>
 				</table>
 			</div>

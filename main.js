@@ -1,4 +1,4 @@
-//TO DO: New fish tier (Check saving too)
+//TO DO: change net price to 25
 money = 0
 
 line = "cast"
@@ -6,7 +6,7 @@ baited = false
 rodQuality = 0
 fishChance = 0
 fishingSite = 1
-fishingPower
+fishingPower = 0
 place = "Hedgefield"
 reelStatus = 1
 castStatus = 1
@@ -28,6 +28,7 @@ level = 1
 xp = 0
 xpMax = 10
 sp = 0
+xpMultiplier = 1
 
 enroled = false
 
@@ -49,6 +50,18 @@ neg = {
 
 patience = {
 	level: 0,
+	cost: 1,
+	multiplier: 1
+}
+
+bartering = {
+	level: 0,
+	cost: 1,
+	multiplier: 1
+}
+
+management = {
+	level: 1,
 	cost: 1,
 	multiplier: 1
 }
@@ -150,7 +163,32 @@ squid = {
 	net: 0
 }
 
+dolphin = {
+	quantity: 0,
+	value: Math.round(10000 * neg.multiplier),
+	net: 0
+}
+
+octopus = {
+	quantity: 0,
+	value: Math.round(30000 * neg.multiplier),
+	net: 0
+}
+
+shark = {
+	quantity: 0,
+	value: Math.round(50000 * neg.multiplier),
+	net: 0
+}
+
 netBarValue = 0
+
+fishPoints = 0
+retireCount = 0
+
+scholarshipLearnt = false
+fastLearnerLearnt = false
+libraryLearnt = false
 
 function save(){
 	var save = {
@@ -169,6 +207,8 @@ function save(){
 		enroled: enroled,
 		net: net,
 		neg: neg,
+		bartering: bartering,
+		management: management,
 		patience: patience,
 		string: string,
 		hook: hook,
@@ -187,6 +227,15 @@ function save(){
 		eel: eel,
 		anglerfish: anglerfish,
 		squid: squid,
+		dolphin: dolphin,
+		octopus: octopus,
+		shark: shark,
+		fishPoints: fishPoints,
+		retireCount: retireCount,
+		scholarshipLearnt: scholarshipLearnt,
+		fastLearnerLearnt: fastLearnerLearnt,
+		xpMultiplier: xpMultiplier,
+		libraryLearnt: libraryLearnt,
 	}
 	localStorage.setItem("save",JSON.stringify(save))
 }
@@ -209,6 +258,8 @@ function load(){
 	if (typeof savegame.net !== "undefined") net = savegame.net
 	if (typeof savegame.neg !== "undefined") neg = savegame.neg
 	if (typeof savegame.patience !== "undefined") patience = savegame.patience
+	if (typeof savegame.bartering !== "undefined") bartering = savegame.bartering
+	if (typeof savegame.management !== "undefined") management = savegame.management
 	if (typeof savegame.string !== "undefined") string = savegame.string
 	if (typeof savegame.hook !== "undefined") hook = savegame.hook
 	if (typeof savegame.reel !== "undefined") reel = savegame.reel
@@ -226,6 +277,15 @@ function load(){
 	if (typeof savegame.eel !== "undefined") eel = savegame.eel
 	if (typeof savegame.anglerfish !== "undefined") anglerfish = savegame.anglerfish
 	if (typeof savegame.squid !== "undefined") squid = savegame.squid
+	if (typeof savegame.dolphin !== "undefined") dolphin = savegame.dolphin
+	if (typeof savegame.octopus !== "undefined") octopus = savegame.octopus
+	if (typeof savegame.shark !== "undefined") shark = savegame.shark
+	if (typeof savegame.fishPoints !== "undefined") fishPoints = savegame.fishPoints
+	if (typeof savegame.retireCount !== "undefined") retireCount = savegame.retireCount
+	if (typeof savegame.scholarshipLearnt !== "undefined") scholarshipLearnt = savegame.scholarshipLearnt
+	if (typeof savegame.fastLearnerLearnt !== "undefined") fastLearnerLearnt = savegame.fastLearnerLearnt
+	if (typeof savegame.xpMultiplier !== "undefined") xpMultiplier = savegame.xpMultiplier
+	if (typeof savegame.libraryLearnt !== "undefined") libraryLearnt = savegame.libraryLearnt
 }
 
 setTimeout(function(){
@@ -234,11 +294,6 @@ setTimeout(function(){
 		questCountdown()
 	}
 }, 200)
-
-
-/*/
-
-/*/
 
 setInterval(function(){
 	save()
@@ -329,6 +384,27 @@ setInterval(function(){
 		document.getElementById("squidRow").style.display = "none"
 		document.getElementById("squidSell").style.display = "none"
 	}
+	if (dolphin.quantity > 0){
+		document.getElementById("dolphinRow").style.display = "block"
+		document.getElementById("dolphinSell").style.display = "block"
+	}else{
+		document.getElementById("dolphinRow").style.display = "none"
+		document.getElementById("dolphinSell").style.display = "none"
+	}
+	if (octopus.quantity > 0){
+		document.getElementById("octopusRow").style.display = "block"
+		document.getElementById("octopusSell").style.display = "block"
+	}else{
+		document.getElementById("octopusRow").style.display = "none"
+		document.getElementById("octopusSell").style.display = "none"
+	}
+	if (shark.quantity > 0){
+		document.getElementById("sharkRow").style.display = "block"
+		document.getElementById("sharkSell").style.display = "block"
+	}else{
+		document.getElementById("sharkRow").style.display = "none"
+		document.getElementById("sharkSell").style.display = "none"
+	}
 
 	if (money >= string.price){
 		document.getElementById("stringDisabled").disabled = false
@@ -368,12 +444,16 @@ setInterval(function(){
 	eel.value = Math.round(1000 * neg.multiplier)
 	anglerfish.value = Math.round(3000 * neg.multiplier)
 	squid.value = Math.round(5000 * neg.multiplier)
+	dolphin.value = Math.round(10000 * neg.multiplier)
+	octopus.value = Math.round(30000 * neg.multiplier)
+	shark.value = Math.round(50000 * neg.multiplier)
 	
 	if (fishingSite == 1){
 		place = "Hedgefield"
 		document.getElementById("travel1Disabled").disabled = true
 		document.getElementById("travel2Disabled").disabled = false
 		document.getElementById("travel3Disabled").disabled = false
+		document.getElementById("travel4Disabled").disabled = false
 		if (string.level <= 1){
 			document.getElementById("stringUpgrade").style.display = "block"
 		}else{
@@ -394,17 +474,15 @@ setInterval(function(){
 		}else{
 			document.getElementById("poleUpgrade").style.display = "none"
 		}
-		if (boat.level <= 0 && rodQuality >= 1){
-			document.getElementById("boatUpgrade").style.display = "block"
-		}else{
-			document.getElementById("boatUpgrade").style.display = "none"
-		}
+		
+		document.getElementById("boatUpgrade").style.display = "none"
 	}
 	if (fishingSite == 2){
 		place = "Lochsummer"
 		document.getElementById("travel1Disabled").disabled = false
 		document.getElementById("travel2Disabled").disabled = true
 		document.getElementById("travel3Disabled").disabled = false
+		document.getElementById("travel4Disabled").disabled = false
 		if (string.level <= 2){
 			document.getElementById("stringUpgrade").style.display = "block"
 		}else{
@@ -431,12 +509,12 @@ setInterval(function(){
 			document.getElementById("boatUpgrade").style.display = "none"
 		}
 	}
-	
 	if (fishingSite == 3){
 		place = "Whiteshore"
 		document.getElementById("travel1Disabled").disabled = false
 		document.getElementById("travel2Disabled").disabled = false
 		document.getElementById("travel3Disabled").disabled = true
+		document.getElementById("travel4Disabled").disabled = false
 		if (string.level <= 3){
 			document.getElementById("stringUpgrade").style.display = "block"
 		}else{
@@ -457,96 +535,186 @@ setInterval(function(){
 		}else{
 			document.getElementById("poleUpgrade").style.display = "none"
 		}
-		/*/
 		if (boat.level <= 2){
 			document.getElementById("boatUpgrade").style.display = "block"
 		}else{
 			document.getElementById("boatUpgrade").style.display = "none"
 		}
-		/*/
+	}
+	if (fishingSite == 4){
+		place = "Greybarrow"
+		document.getElementById("travel1Disabled").disabled = false
+		document.getElementById("travel2Disabled").disabled = false
+		document.getElementById("travel3Disabled").disabled = false
+		document.getElementById("travel4Disabled").disabled = true
+		if (string.level <= 4){
+			document.getElementById("stringUpgrade").style.display = "block"
+		}else{
+			document.getElementById("stringUpgrade").style.display = "none"
+		}
+		if (hook.level <= 4){
+			document.getElementById("hookUpgrade").style.display = "block"
+		}else{
+			document.getElementById("hookUpgrade").style.display = "none"
+		}
+		if (reel.level <= 4){
+			document.getElementById("reelUpgrade").style.display = "block"
+		}else{
+			document.getElementById("reelUpgrade").style.display = "none"
+		}
+		if (pole.level <= 4){
+			document.getElementById("poleUpgrade").style.display = "block"
+		}else{
+			document.getElementById("poleUpgrade").style.display = "none"
+		}
+		if (boat.level <= 3){
+			document.getElementById("boatUpgrade").style.display = "block"
+		}else{
+			document.getElementById("boatUpgrade").style.display = "none"
+		}
 	}
 	
+	document.getElementById("boatBar").style.display = "block"
 	
-	if (boat.level >= 1){
-		document.getElementById("boatBought").style.display = "block"
+	if(money > 250 && rodQuality >= 1){
+		document.getElementById("repairBoat").disabled = false
 	}else{
-		document.getElementById("boatBought").style.display = "none"
+		document.getElementById("repairBoat").disabled = true
 	}
 	
+	if(boat.level == 0){
+		document.getElementById("travelContent").style.display = "none"
+		document.getElementById("repairBoat").style.display = "block"
+	}else{
+		document.getElementById("travelContent").style.display = "block"
+		document.getElementById("repairBoat").style.display = "none"
+	}
+	
+	if(boat.level == 0){
+		document.getElementById("boatBar").innerHTML = "Abandoned boat"
+		document.getElementById("boatTitle").innerHTML = "Abandoned boat"
+		document.getElementById("boatDescription").innerHTML = "An old fishing boat is sitting on the coast. It looks heavily damaged."
+		document.getElementById("boatSubTitle").innerHTML = "Repair"
+	}else{
+		document.getElementById("boatBar").innerHTML = "Fishing boat"
+		document.getElementById("boatTitle").innerHTML = "Fishing boat"
+		document.getElementById("boatDescription").innerHTML = "Travel to different places to catch better fish and buy better equipment."
+		document.getElementById("boatSubTitle").innerHTML = "Travel"
+	}
 	if (boat.level == 1){
 		document.getElementById("travel1Disabled").style.display = "block"
 		document.getElementById("travel2Disabled").style.display = "block"
 		document.getElementById("travel3Disabled").style.display = "none"
+		document.getElementById("travel4Disabled").style.display = "none"
 	}else if (boat.level == 2){
 		document.getElementById("travel1Disabled").style.display = "block"
 		document.getElementById("travel2Disabled").style.display = "block"
 		document.getElementById("travel3Disabled").style.display = "block"
+		document.getElementById("travel4Disabled").style.display = "none"
+	}else if (boat.level == 3){
+		document.getElementById("travel1Disabled").style.display = "block"
+		document.getElementById("travel2Disabled").style.display = "block"
+		document.getElementById("travel3Disabled").style.display = "block"
+		document.getElementById("travel4Disabled").style.display = "block"
 	}
 	
+	//((2*n^2) + 100) * 1.5
+	
+	priceReduction = (1 - bartering.multiplier)
+	
 	if (string.level == 1){
-		string.price = 10
+		string.price = Math.round(10 * priceReduction)
 	}else if (string.level == 2){
-		string.price = 450
+		string.price = Math.round(450 * priceReduction)
 	}else if (string.level == 3){
-		string.price = 5000
+		string.price = Math.round(7500 * priceReduction)
+	}else if (string.level == 4){
+		string.price = Math.round(150000 * priceReduction)
 	}
 	
 	if (hook.level == 1){
-		hook.price = 40
+		hook.price = Math.round(40 * priceReduction)
 	}else if (hook.level == 2){
-		hook.price = 1350
+		hook.price = Math.round(1350 * priceReduction)
 	}else if (hook.level == 3){
-		hook.price = 28000
+		hook.price = Math.round(28000 * priceReduction)
+	}else if (hook.level == 4){
+		hook.price = Math.round(475000 * priceReduction)
 	}
 	
 	if (reel.level == 1){
-		reel.price = 90
+		reel.price = Math.round(90 * priceReduction)
 	}else if (reel.level == 2){
-		reel.price = 2850
+		reel.price = Math.round(2850 * priceReduction)
 	}else if (reel.level == 3){
-		reel.price = 58000
+		reel.price = Math.round(58000 * priceReduction)
+	}else if (reel.level == 4){
+		reel.price = Math.round(975000 * priceReduction)
 	}
 	
 	if (pole.level == 1){
-		pole.price = 160
+		pole.price = Math.round(160 * priceReduction)
 	}else if (pole.level == 2){
-		pole.price = 4950
+		pole.price = Math.round(4950 * priceReduction)
 	}else if (pole.level == 3){
-		pole.price = 100000
+		pole.price = Math.round(100000 * priceReduction)
+	}else if (pole.level == 4){
+		pole.price = Math.round(1675000 * priceReduction)
 	}
 	
 	if (boat.level == 0){
-		boat.price = 250
+		boat.price = Math.round(250 * priceReduction)
 	}else if (boat.level == 1){
-		boat.price = 7650
+		boat.price = Math.round(7650 * priceReduction)
 	}else if (boat.level == 2){
-		boat.price = 154000
+		boat.price = Math.round(154000 * priceReduction)
+	}else if (boat.level == 3){
+		boat.price = Math.round(2575000 * priceReduction)
 	}
 	
 	if (net.level == 1){
-		net.price = 2850
+		net.price = Math.round(2850 * priceReduction)
 	}else if (net.level == 2){
-		net.price = 58000
+		net.price = Math.round(58000 * priceReduction)
 	}else if (net.level == 3){
-		net.price = "Max"
+		net.price = Math.round(975000 * priceReduction)
 	}
 	
 	if (fishingSite == 1){
 		document.getElementById("anglerBar").style.display = "none"
-		document.getElementById("schoolBar").style.display = "none"
+		if (scholarshipLearnt == true){
+			document.getElementById("schoolBar").style.display = "block"
+		}else{
+			document.getElementById("schoolBar").style.display = "none"
+		}
+		document.getElementById("retireBar").style.display = "none"
+		if (retireCount > 0){
+			document.getElementById("masterBar").style.display = "block"
+		}else{
+			document.getElementById("masterBar").style.display = "none"
+		}
 	}else if(fishingSite == 2){
 		document.getElementById("anglerBar").style.display = "block"
 		document.getElementById("schoolBar").style.display = "none"
+		document.getElementById("retireBar").style.display = "none"
+		document.getElementById("masterBar").style.display = "none"
 	}else if(fishingSite == 3){
 		document.getElementById("anglerBar").style.display = "none"
 		document.getElementById("schoolBar").style.display = "block"
+		document.getElementById("retireBar").style.display = "none"
+		document.getElementById("masterBar").style.display = "none"
+	}else if(fishingSite == 4){
+		document.getElementById("anglerBar").style.display = "none"
+		document.getElementById("schoolBar").style.display = "none"
+		document.getElementById("retireBar").style.display = "block"
+		document.getElementById("masterBar").style.display = "none"
 	}
 	
 	if (xp >= xpMax){
 		level += 1
 		sp += 1
 		xp = 0
-		xpMax = Math.round(xpMax * 1.3)
+		xpMax = Math.round(xpMax * 1.2)
 		document.getElementById("levelNotif").style.color = "#00ff00"
 		setTimeout(function(){
 			document.getElementById("levelNotif").style.color = "white"
@@ -573,20 +741,36 @@ setInterval(function(){
 		document.getElementById("negButton").disabled = false
 	}
 	
-	if (sp < patience.cost){
+	if (sp < patience.cost || patience.level >= 7){
 		document.getElementById("patienceButton").disabled = true
 	}else{
 		document.getElementById("patienceButton").disabled = false
+	}
+	
+	if (sp < bartering.cost || bartering.level >= 7){
+		document.getElementById("barteringButton").disabled = true
+	}else{
+		document.getElementById("barteringButton").disabled = false
+	}
+	
+	if (sp < management.cost || management.level >= 7){
+		document.getElementById("managementButton").disabled = true
+	}else{
+		document.getElementById("managementButton").disabled = false
 	}
 	
 	rodQuality = (string.level / 4) + (hook.level / 4) + (reel.level / 4) + (pole.level / 4) - 1
 	fishingPower = string.level * hook.level * reel.level * pole.level
 	
 	neg.cost = neg.level + 1
-	patience.cost = (patience.level * 2) + 1
+	patience.cost = (patience.level * 3) + 1
+	bartering.cost = (bartering.level * 3) + 1
+	management.cost = (management.level * 3) + 1
 	
 	neg.multiplier = 1 + (neg.level / 10)
 	patience.multiplier = patience.level / 10
+	bartering.multiplier = bartering.level / 10
+	management.multiplier = management.level / 10
 	
 	document.getElementById("money").innerHTML = money
 	document.getElementById("tinCanQuantity").innerHTML = tinCan.quantity
@@ -601,6 +785,9 @@ setInterval(function(){
 	document.getElementById("eelQuantity").innerHTML = eel.quantity
 	document.getElementById("anglerfishQuantity").innerHTML = anglerfish.quantity
 	document.getElementById("squidQuantity").innerHTML = squid.quantity
+	document.getElementById("dolphinQuantity").innerHTML = dolphin.quantity
+	document.getElementById("octopusQuantity").innerHTML = octopus.quantity
+	document.getElementById("sharkQuantity").innerHTML = shark.quantity
 	
 	document.getElementById("stringLevel").innerHTML = string.level + 1
 	document.getElementById("hookLevel").innerHTML = hook.level + 1
@@ -629,6 +816,9 @@ setInterval(function(){
 	document.getElementById("eelValue").innerHTML = eel.value * eel.quantity
 	document.getElementById("anglerfishValue").innerHTML = anglerfish.value * anglerfish.quantity
 	document.getElementById("squidValue").innerHTML = squid.value * squid.quantity
+	document.getElementById("dolphinValue").innerHTML = dolphin.value * dolphin.quantity
+	document.getElementById("octopusValue").innerHTML = octopus.value * octopus.quantity
+	document.getElementById("sharkValue").innerHTML = shark.value * shark.quantity
 	
 	document.getElementById("questReq").innerHTML = questReq
 	document.getElementById("questReward").innerHTML = questReward
@@ -645,12 +835,18 @@ setInterval(function(){
 	
 	document.getElementById("negPrice").innerHTML = neg.cost
 	document.getElementById("patiencePrice").innerHTML = patience.cost
+	document.getElementById("barteringPrice").innerHTML = bartering.cost
+	document.getElementById("managementPrice").innerHTML = management.cost
 	
 	document.getElementById("negEffect").innerHTML = Math.round((neg.multiplier - 1) * 100)
 	document.getElementById("patienceEffect").innerHTML = Math.round(patience.multiplier * 100)
+	document.getElementById("barteringEffect").innerHTML = Math.round(bartering.multiplier * 100)
+	document.getElementById("managementEffect").innerHTML = Math.round(management.multiplier * 100)
 	
 	document.getElementById("negLevel").innerHTML = neg.level + 1
 	document.getElementById("patienceLevel").innerHTML = patience.level + 1
+	document.getElementById("barteringLevel").innerHTML = bartering.level + 1
+	document.getElementById("managementLevel").innerHTML = management.level + 1
 	
 	document.getElementById("level2").innerHTML = level
 	document.getElementById("levelPercentage").innerHTML = Math.round((xp/xpMax) * 100)
@@ -686,6 +882,15 @@ setInterval(function(){
 	}
 	if (questObj == "squid"){
 		questCurrent = squid.quantity
+	}
+	if (questObj == "dolphin"){
+		questCurrent = dolphin.quantity
+	}
+	if (questObj == "octopus"){
+		questCurrent = octopus.quantity
+	}
+	if (questObj == "shark"){
+		questCurrent = shark.quantity
 	}
 	
 	if (enroled == true){
@@ -752,6 +957,21 @@ setInterval(function(){
 			questObjMet = 1
 		}
 	}
+	if (questObj == "dolphin"){
+		if (dolphin.quantity >= questReq){
+			questObjMet = 1
+		}
+	}
+	if (questObj == "octopus"){
+		if (octopus.quantity >= questReq){
+			questObjMet = 1
+		}
+	}
+	if (questObj == "shark"){
+		if (shark.quantity >= questReq){
+			questObjMet = 1
+		}
+	}
 	
 	if (questObjMet == 1){
 		document.getElementById("questNotif").style.color = "#00ff00"
@@ -782,7 +1002,7 @@ setInterval(function(){
 	document.getElementById("netMax").innerHTML = net.max
 	document.getElementById("netCapacity2").innerHTML = "Net capacity: "
 	
-	net.quantity = tinCan.net + rubberDuck.net + oldBoot.net + bass.net + tuna.net + salmon.net + pike.net + swordfish.net + clownfish.net + eel.net + anglerfish.net + squid.net
+	net.quantity = tinCan.net + rubberDuck.net + oldBoot.net + bass.net + tuna.net + salmon.net + pike.net + swordfish.net + clownfish.net + eel.net + anglerfish.net + squid.net + dolphin.net + octopus.net + shark.net
 	
 	document.getElementById("netLevel").innerHTML = net.level
 	document.getElementById("netPrice").innerHTML = net.price
@@ -796,6 +1016,9 @@ setInterval(function(){
 	if (net.level == 3){
 		net.max = 15
 	}
+	if (net.level == 4){
+		net.max = 20
+	}
 	
 	if (money < net.price){
 		document.getElementById("upgradeNet").disabled = true
@@ -803,7 +1026,7 @@ setInterval(function(){
 		document.getElementById("upgradeNet").disabled = false
 	}
 	
-	if (money < 50){
+	if (money < 25){
 		document.getElementById("installNet").disabled = true
 	}else{
 		document.getElementById("installNet").disabled = false
@@ -849,10 +1072,26 @@ setInterval(function(){
 		questObj = "squid"
 		questReward = squid.value * questReq * 2
 	}
+	if (questChance > 4 && questChance <= 4.34){
+		questObj = "dolphin"
+		questReward = dolphin.value * questReq * 2
+	}
+	if (questChance > 4.34 && questChance <= 4.67){
+		questObj = "octopus"
+		questReward = octopus.value * questReq * 2
+	}
+	if (questChance > 4.67 && questChance <= 5){
+		questObj = "shark"
+		questReward = shark.value * questReq * 2
+	}
 	
-	document.getElementById("netBar").style.width = ((netBarValue / 150) * 100) + "%"
+	//CHECK
 	
-	if (netBarValue >= 150){
+	netMax = (150 * (1 - management.multiplier))
+	
+	document.getElementById("netBar").style.width = ((netBarValue / netMax) * 100) + "%"
+	
+	if (netBarValue >= netMax){
 		netBarValue = 0
 		if (net.installed == true && net.quantity < net.max){
 			fishChance = rodQuality + Math.random() - 0.25
@@ -868,53 +1107,98 @@ setInterval(function(){
 			}
 			if (fishChance >= 0 && fishChance <= 0.34){
 				tinCan.net += 1
-				console.log("tinCan")
 			}
 			if (fishChance > 0.34 && fishChance <= 0.67){
 				rubberDuck.net += 1
-				console.log("rubberDuck")
 			}
 			if (fishChance > 0.67 && fishChance <= 1){
 				oldBoot.net += 1
-				console.log("oldBoot")
 			}
 			if (fishChance > 1 && fishChance <= 1.34){
 				bass.net += 1
-				console.log("bass")
 			}
 			if (fishChance > 1.34 && fishChance <= 1.67){
 				tuna.net += 1
-				console.log("tuna")
 			}
 			if (fishChance > 1.67 && fishChance <= 2){
 				salmon.net += 1
-				console.log("salmon")
 			}
 			if (fishChance > 2 && fishChance <= 2.34){
 				pike.net += 1
-				console.log("pike")
 			}
 			if (fishChance > 2.34 && fishChance <= 2.67){
 				swordfish.net += 1
-				console.log("swordfish")
 			}
 			if (fishChance > 2.67 && fishChance <= 3){
 				clownfish.net += 1
-				console.log("clownfish")
 			}
 			if (fishChance > 3 && fishChance <= 3.34){
 				eel.net += 1
-				console.log("eel")
 			}
 			if (fishChance > 3.34 && fishChance <= 3.67){
 				anglerfish.net += 1
-				console.log("anglerfish")
 			}
 			if (fishChance > 3.67 && fishChance <= 4){
 				squid.net += 1
-				console.log("squid")
+			}
+			if (fishChance > 4 && fishChance <= 4.34){
+				dolphin.net += 1
+			}
+			if (fishChance > 4.34 && fishChance <= 4.67){
+				octopus.net += 1
+			}
+			if (fishChance > 4.67 && fishChance <= 5){
+				shark.net += 1
 			}
 		}
+	}
+	
+	document.getElementById("skillpoints").innerHTML = sp
+	
+	document.getElementById("fishPointsOnReset").innerHTML = Math.pow(2, (string.level + hook.level + reel.level + pole.level) - 12)
+	document.getElementById("fishPoints").innerHTML = fishPoints
+	
+	if (fishPoints >= 5){
+		document.getElementById("scholarshipButton").disabled = false
+	}else{
+		document.getElementById("scholarshipButton").disabled = true
+	}
+	if (fishPoints >= 10){
+		document.getElementById("fastLearnerButton").disabled = false
+	}else{
+		document.getElementById("fastLearnerButton").disabled = true
+	}
+	if (fishPoints >= 200){
+		document.getElementById("libraryButton").disabled = false
+	}else{
+		document.getElementById("libraryButton").disabled = true
+	}
+	
+	if (scholarshipLearnt == true){
+		document.getElementById("scholarship").style.display = "none"
+		enroled = true
+	}else{
+		document.getElementById("scholarship").style.display = "block"
+	}
+	
+	if (fastLearnerLearnt == true){
+		document.getElementById("fastLearner").style.display = "none"
+	}else{
+		document.getElementById("fastLearner").style.display = "block"
+	}
+	
+	if (libraryLearnt == true){
+		document.getElementById("library").style.display = "none"
+	}else{
+		document.getElementById("library").style.display = "block"
+	}
+	
+	if (libraryLearnt == true){
+		document.getElementById("tier2Economics").style.display = "block"
+		document.getElementById("tier2Fishing").style.display = "block"
+	}else{
+		document.getElementById("tier2Economics").style.display = "none"
+		document.getElementById("tier2Fishing").style.display = "none"
 	}
 }, 10)
 
@@ -1016,42 +1300,66 @@ function fishCatch(){
 	}
 	if (fishChance >= 0 && fishChance <= 0.34){
 		tinCan.quantity += 1
+		fishCaught("Tin can")
 	}
 	if (fishChance > 0.34 && fishChance <= 0.67){
 		rubberDuck.quantity += 1
+		fishCaught("Rubber duck")
 	}
 	if (fishChance > 0.67 && fishChance <= 1){
 		oldBoot.quantity += 1
+		fishCaught("Old boot")
 	}
 	if (fishChance > 1 && fishChance <= 1.34){
 		bass.quantity += 1
+		fishCaught("Bass")
 	}
 	if (fishChance > 1.34 && fishChance <= 1.67){
 		tuna.quantity += 1
+		fishCaught("Tuna")
 	}
 	if (fishChance > 1.67 && fishChance <= 2){
 		salmon.quantity += 1
+		fishCaught("Salmon")
 	}
 	if (fishChance > 2 && fishChance <= 2.34){
 		pike.quantity += 1
+		fishCaught("Pike")
 	}
 	if (fishChance > 2.34 && fishChance <= 2.67){
 		swordfish.quantity += 1
+		fishCaught("Swordfish")
 	}
 	if (fishChance > 2.67 && fishChance <= 3){
 		clownfish.quantity += 1
+		fishCaught("Clownfish")
 	}
 	if (fishChance > 3 && fishChance <= 3.34){
 		eel.quantity += 1
+		fishCaught("Eel")
 	}
 	if (fishChance > 3.34 && fishChance <= 3.67){
 		anglerfish.quantity += 1
+		fishCaught("Anglerfish")
 	}
 	if (fishChance > 3.67 && fishChance <= 4){
 		squid.quantity += 1
+		fishCaught("Squid")
+	}
+	if (fishChance > 4 && fishChance <= 4.34){
+		dolphin.quantity += 1
+		fishCaught("Dolphin")
+	}
+	if (fishChance > 4.34 && fishChance <= 4.67){
+		octopus.quantity += 1
+		fishCaught("Octopus")
+	}
+	if (fishChance > 4.67 && fishChance <= 5){
+		shark.quantity += 1
+		fishCaught("Shark")
 	}
 	if (enroled == true){
-		xp += 1 + Math.round(Math.random() * 4)
+		xp += 3 * xpMultiplier
 	}
 }
 
@@ -1063,30 +1371,56 @@ function go(place){
 		document.getElementById("fishingBoat").style.display = "none"
 		document.getElementById("angler").style.display = "none"
 		document.getElementById("school").style.display = "none"
+		document.getElementById("retire").style.display = "none"
+		document.getElementById("master").style.display = "none"
 	}else if (place == 2){
 		document.getElementById("area").style.display = "none"
 		document.getElementById("store").style.display = "block"
 		document.getElementById("fishingBoat").style.display = "none"
 		document.getElementById("angler").style.display = "none"
 		document.getElementById("school").style.display = "none"
+		document.getElementById("retire").style.display = "none"
+		document.getElementById("master").style.display = "none"
 	}else if (place == 3){
 		document.getElementById("area").style.display = "none"
 		document.getElementById("store").style.display = "none"
 		document.getElementById("fishingBoat").style.display = "block"
 		document.getElementById("angler").style.display = "none"
 		document.getElementById("school").style.display = "none"
+		document.getElementById("retire").style.display = "none"
+		document.getElementById("master").style.display = "none"
 	}else if (place == 4){
 		document.getElementById("area").style.display = "none"
 		document.getElementById("store").style.display = "none"
 		document.getElementById("fishingBoat").style.display = "none"
 		document.getElementById("angler").style.display = "block"
 		document.getElementById("school").style.display = "none"
+		document.getElementById("retire").style.display = "none"
+		document.getElementById("master").style.display = "none"
 	}else if (place == 5){
 		document.getElementById("area").style.display = "none"
 		document.getElementById("store").style.display = "none"
 		document.getElementById("fishingBoat").style.display = "none"
 		document.getElementById("angler").style.display = "none"
 		document.getElementById("school").style.display = "block"
+		document.getElementById("retire").style.display = "none"
+		document.getElementById("master").style.display = "none"
+	}else if (place == 6){
+		document.getElementById("area").style.display = "none"
+		document.getElementById("store").style.display = "none"
+		document.getElementById("fishingBoat").style.display = "none"
+		document.getElementById("angler").style.display = "none"
+		document.getElementById("school").style.display = "none"
+		document.getElementById("retire").style.display = "block"
+		document.getElementById("master").style.display = "none"
+	}else if (place == 7){
+		document.getElementById("area").style.display = "none"
+		document.getElementById("store").style.display = "none"
+		document.getElementById("fishingBoat").style.display = "none"
+		document.getElementById("angler").style.display = "none"
+		document.getElementById("school").style.display = "none"
+		document.getElementById("retire").style.display = "none"
+		document.getElementById("master").style.display = "block"
 	}
 }
 
@@ -1139,6 +1473,18 @@ function sell(fish){
 		money += squid.value * squid.quantity
 		squid.quantity = 0
 	}
+	if (fish == 13 && dolphin.quantity > 0){
+		money += dolphin.value * dolphin.quantity
+		dolphin.quantity = 0
+	}
+	if (fish == 14 && octopus.quantity > 0){
+		money += octopus.value * octopus.quantity
+		octopus.quantity = 0
+	}
+	if (fish == 15 && shark.quantity > 0){
+		money += shark.value * shark.quantity
+		shark.quantity = 0
+	}
 }
 
 function buy(upgrade){
@@ -1161,6 +1507,7 @@ function buy(upgrade){
 	if (upgrade == 5 && money >= boat.price){
 		boat.level += 1
 		if (boat.level == 1){
+			console.log("hqwe")
 			questSet()
 		}
 		money -= boat.price
@@ -1176,6 +1523,9 @@ function travel(site){
 	}
 	if (site == 3){
 		fishingSite = 3
+	}
+	if (site == 4){
+		fishingSite = 4
 	}
 }
 
@@ -1221,6 +1571,18 @@ function questSet(){
 	if (questChance > 3.67 && questChance <= 4){
 		questObj = "squid"
 		questReward = squid.value * questReq * 2
+	}
+	if (questChance > 4 && questChance <= 4.34){
+		questObj = "dolphin"
+		questReward = dolphin.value * questReq * 2
+	}
+	if (questChance > 4.34 && questChance <= 4.67){
+		questObj = "octopus"
+		questReward = octopus.value * questReq * 2
+	}
+	if (questChance > 4.67 && questChance <= 5){
+		questObj = "shark"
+		questReward = shark.value * questReq * 2
 	}
 }
 
@@ -1306,6 +1668,33 @@ function questRedeem(){
 			questObjMet = 0
 		}
 	}
+	if (questObj == "dolphin"){
+		if (dolphin.quantity >= questReq){
+			dolphin.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+			questObjMet = 0
+		}
+	}
+	if (questObj == "octopus"){
+		if (octopus.quantity >= questReq){
+			octopus.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+			questObjMet = 0
+		}
+	}
+	if (questObj == "shark"){
+		if (shark.quantity >= questReq){
+			shark.quantity -= questReq
+			money += questReward
+			questSet()
+			clearInterval(questInterval)
+			questObjMet = 0
+		}
+	}
 }
 
 
@@ -1337,80 +1726,26 @@ function patienceLearn(){
 	patience.level += 1
 }
 
+function barteringLearn(){
+	sp -= bartering.cost
+	bartering.level += 1
+}
+
+function managementLearn(){
+	sp -= management.cost
+	management.level += 1
+}
+
 function installNet(){
-	if (money >= 50){
-		money -= 50
+	if (money >= 25){
+		money -= 25
 		net.installed = true
+		netBarValue = 0
 	}
 }
 
-/*/
-setInterval(function(){
-	if (net.installed == true && net.quantity < net.max){
-		fishChance = rodQuality + Math.random() - 0.25
-		if (fishingSite == 1 && fishChance > 2){
-			fishChance = 2
-		}else if (fishingSite == 2 && fishChance > 3){
-			fishChance = 3
-		}else if (fishingSite == 3 && fishChance > 4){
-			fishChance = 4
-		}
-		if (fishChance < 0){
-			fishChance = 0
-		}
-		if (fishChance >= 0 && fishChance <= 0.34){
-			tinCan.net += 1
-			console.log("tinCan")
-		}
-		if (fishChance > 0.34 && fishChance <= 0.67){
-			rubberDuck.net += 1
-			console.log("rubberDuck")
-		}
-		if (fishChance > 0.67 && fishChance <= 1){
-			oldBoot.net += 1
-			console.log("oldBoot")
-		}
-		if (fishChance > 1 && fishChance <= 1.34){
-			bass.net += 1
-			console.log("bass")
-		}
-		if (fishChance > 1.34 && fishChance <= 1.67){
-			tuna.net += 1
-			console.log("tuna")
-		}
-		if (fishChance > 1.67 && fishChance <= 2){
-			salmon.net += 1
-			console.log("salmon")
-		}
-		if (fishChance > 2 && fishChance <= 2.34){
-			pike.net += 1
-			console.log("pike")
-		}
-		if (fishChance > 2.34 && fishChance <= 2.67){
-			swordfish.net += 1
-			console.log("swordfish")
-		}
-		if (fishChance > 2.67 && fishChance <= 3){
-			clownfish.net += 1
-			console.log("clownfish")
-		}
-		if (fishChance > 3 && fishChance <= 3.34){
-			eel.net += 1
-			console.log("eel")
-		}
-		if (fishChance > 3.34 && fishChance <= 3.67){
-			anglerfish.net += 1
-			console.log("anglerfish")
-		}
-		if (fishChance > 3.67 && fishChance <= 4){
-			squid.net += 1
-			console.log("squid")
-		}
-	}
-}, 15000)
-/*/
-
 function emptyNet(){
+	xp += Math.floor(net.quantity / 2) * xpMultiplier
 	tinCan.quantity += tinCan.net
 	tinCan.net = 0
 	rubberDuck.quantity += rubberDuck.net
@@ -1435,6 +1770,12 @@ function emptyNet(){
 	anglerfish.net = 0
 	squid.quantity += squid.net
 	squid.net = 0
+	dolphin.quantity += eel.net
+	dolphin.net = 0
+	octopus.quantity += anglerfish.net
+	octopus.net = 0
+	shark.quantity += squid.net
+	shark.net = 0
 }
 
 function upgradeNet(){
@@ -1445,8 +1786,11 @@ function upgradeNet(){
 }
 
 function resetGame(){
-	localStorage.removeItem("save")
-	location.reload()
+	confirmation = confirm("Are you sure you want to reset?")
+	if (confirmation == true){
+		localStorage.removeItem("save")
+		location.reload()	
+	}
 }
 
 setInterval(function(){
@@ -1456,3 +1800,230 @@ setInterval(function(){
 		netBarValue = 0
 	}
 }, 100)
+
+document.getElementById("fishCaughtText").style.display = "none"
+function fishCaught(fish){
+	document.getElementById("fishCaughtText").style.display = "block"
+	document.getElementById("fishCaughtText").innerHTML = fish + " caught!"
+	setTimeout(function(){
+		document.getElementById("fishCaughtText").style.display = "none"
+	}, 1000)
+}
+
+function retire(){
+	fishPoints += Math.pow(2, (string.level + hook.level + reel.level + pole.level) - 12)
+	retireCount += 1
+	
+	go(1)
+	
+	money = 0
+
+	line = "cast"
+	baited = false
+	rodQuality = 0
+	fishChance = 0
+	fishingSite = 1
+	fishingPower = 0
+	place = "Hedgefield"
+	reelStatus = 1
+	castStatus = 1
+	fishBarValue = 0
+	fishBarDirection = 1
+	fishBarBonus = 0
+	fishBarText = ""
+	fishBarTextHide = false
+
+	questChance = 0
+	questObj = 1
+	questReq = 0
+	questReward = 0
+	questTimer = 0
+	questObjMet = 0
+	questCurrent = ""
+
+	level = 1
+	xp = 0
+	xpMax = 10
+	sp = 0
+
+	enroled = false
+
+	net = {
+		installed: false,
+		catchRate: 0,
+		size: 0,
+		quantity: 0,
+		max: 5,
+		price: 0,
+		level: 0
+	}
+
+	neg = {
+		level: 0,
+		cost: 1,
+		multiplier: 1
+	}
+
+	patience = {
+		level: 0,
+		cost: 1,
+		multiplier: 1
+	}
+	
+	bartering = {
+		level: 0,
+		cost: 1,
+		multiplier: 1
+	}
+
+	management = {
+		level: 0,
+		cost: 1,
+		multiplier: 1
+	}
+
+	string = {
+		level: 1,
+		price: 10
+	}
+
+	hook = {
+		level: 1,
+		price: 20
+	}
+
+	reel = {
+		level: 1,
+		price: 30
+	}
+
+	pole = {
+		level: 1,
+		price: 40
+	}
+
+	boat = {
+		level: 0,
+		price: 100
+	}
+
+	tinCan = {
+		quantity: 0,
+		value: Math.round(1 * neg.multiplier),
+		net: 0 
+	}
+
+	rubberDuck = {
+		quantity: 0,
+		value: Math.round(3 * neg.multiplier),
+		net: 0
+	}
+
+	oldBoot = {
+		quantity: 0,
+		value: Math.round(5 * neg.multiplier),
+		net: 0
+	}
+
+	bass = {
+		quantity: 0,
+		value: Math.round(10 * neg.multiplier),
+		net: 0
+	}
+
+	tuna = {
+		quantity: 0,
+		value: Math.round(30 * neg.multiplier),
+		net: 0
+	}
+
+	salmon = {
+		quantity: 0,
+		value: Math.round(50 * neg.multiplier),
+		net: 0
+	}
+
+	pike = {
+		quantity: 0,
+		value: Math.round(100 * neg.multiplier),
+		net: 0
+	}
+
+	swordfish = {
+		quantity: 0,
+		value: Math.round(300 * neg.multiplier),
+		net: 0
+	}
+
+	clownfish = {
+		quantity: 0,
+		value: Math.round(500 * neg.multiplier),
+		net: 0
+	}
+
+	eel = {
+		quantity:  0,
+		value: Math.round(1000 * neg.multiplier),
+		net: 0
+	}
+
+	anglerfish = {
+		quantity: 0,
+		value: Math.round(3000 * neg.multiplier),
+		net: 0
+	}
+
+	squid = {
+		quantity: 0,
+		value: Math.round(5000 * neg.multiplier),
+		net: 0
+	}
+
+	dolphin = {
+		quantity: 0,
+		value: Math.round(10000 * neg.multiplier),
+		net: 0
+	}
+
+	octopus = {
+		quantity: 0,
+		value: Math.round(30000 * neg.multiplier),
+		net: 0
+	}
+
+	shark = {
+		quantity: 0,
+		value: Math.round(50000 * neg.multiplier),
+		net: 0
+	}
+
+	netBarValue = 0
+	
+	save()
+	location.reload()
+}
+
+function repairBoat(){
+	if (money >= boat.price){
+		boat.level = 1
+		console.log("hqwe")
+		questSet()
+		money -= boat.price
+	}
+}
+
+function scholarshipLearn(){
+	fishPoints -= 5
+	scholarshipLearnt = true
+}
+
+function fastLearnerLearn(){
+	fishPoints -= 10
+	fastLearnerLearnt = true
+	xpMultiplier *= 2
+}
+
+function libraryLearn(){
+	fishPoints -= 200
+	libraryLearnt = true
+}

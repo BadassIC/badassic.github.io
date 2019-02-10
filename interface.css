@@ -29,3 +29,8 @@
 .w3-bar-item{
 	transition-duration: 0.2s;
 }
+
+.body{
+	color: #ffffff;
+	background-color: #393939;
+}

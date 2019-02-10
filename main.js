@@ -1215,10 +1215,10 @@ function castLine(){
 				fishBarDirection = 1
 			}
 			if (fishBarDirection == 1){
-				fishBarValue += 5	
+				fishBarValue += 10	
 			}
 			if (fishBarDirection == 2){
-				fishBarValue -= 5
+				fishBarValue -= 10
 				console.log("2")
 			}
 		}, 15)
@@ -1789,7 +1789,9 @@ function resetGame(){
 	confirmation = confirm("Are you sure you want to reset?")
 	if (confirmation == true){
 		localStorage.removeItem("save")
-		location.reload()	
+		setTimeout(function(){
+			location.reload()
+		}, 200)
 	}
 }
 

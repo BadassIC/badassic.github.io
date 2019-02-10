@@ -1229,19 +1229,19 @@ function castLine(){
 		}, 1000)
 		fishBarTextHide = false
 		if (fishBarValue >= 100){
-			fishBarBonus = 0.5
+			fishBarBonus = 1
 			fishBarText = "Perfect cast!"
 		} else if (fishBarValue >= 90){
-			fishBarBonus = 0.4
+			fishBarBonus = 0.8
 			fishBarText = "Great cast!"
 		} else if (fishBarValue >= 75){
-			fishBarBonus = 0.3
+			fishBarBonus = 0.6
 			fishBarText = "Good cast"
 		} else if (fishBarValue >= 60){
-			fishBarBonus = 0.2
+			fishBarBonus = 0.4
 			fishBarText = "OK cast"
 		} else if (fishBarValue >= 50){
-			fishBarBonus = 0.1
+			fishBarBonus = 0.2
 			fishBarText = "Bad cast"
 		} else if (fishBarValue < 50){
 			fishBarBonus = 0
@@ -1287,7 +1287,7 @@ function reelLine(){
 }
 
 function fishCatch(){
-	fishChance = rodQuality + Math.random() - 0.5 + fishBarBonus
+	fishChance = rodQuality + fishBarBonus
 	if (fishingSite == 1 && fishChance > 2){
 		fishChance = 2
 	}else if (fishingSite == 2 && fishChance > 3){

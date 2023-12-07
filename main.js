@@ -192,8 +192,8 @@ scholarshipLearnt = false
 fastLearnerLearnt = false
 libraryLearnt = false
 
-function save(){
-	var save = {
+function generateSaveJSON(){
+	const save = {
 		money: money,
 		fishingSite: fishingSite,
 		questObj: questObj,
@@ -239,11 +239,37 @@ function save(){
 		xpMultiplier: xpMultiplier,
 		libraryLearnt: libraryLearnt,
 	}
-	localStorage.setItem("save",JSON.stringify(save))
+
+	return save
 }
 
-function load(){
-	var savegame = JSON.parse(localStorage.getItem("save"))
+function save(){
+	localStorage.setItem("save", JSON.stringify(generateSaveJSON()))
+}
+
+function exportSave(){ 
+	const a = document.createElement('a');
+	const blob = new Blob([JSON.stringify(generateSaveJSON())],
+        	{ type: "text/plain;charset=utf-8" });
+
+        a.href = URL.createObjectURL(blob);
+	a.download = "incremental-fishing.save";
+	a.click();
+
+	URL.revokeObjectURL(a.href);
+}
+
+document.getElementById("import").addEventListener("change", function () {
+	let fr = new FileReader()
+
+        fr.onload = function () {
+        	load(JSON.parse(fr.result))
+        }
+ 
+        fr.readAsText(this.files[0])
+})
+
+function load(savegame){
 	if (typeof savegame.money !== "undefined") money = savegame.money
 	if (typeof savegame.fishingSite !== "undefined") fishingSite = savegame.fishingSite
 	if (typeof savegame.questObj !== "undefined") questObj = savegame.questObj
@@ -291,7 +317,7 @@ function load(){
 }
 
 setTimeout(function(){
-	load()
+	load(JSON.parse(localStorage.getItem("save")))
 	if (boat.level >= 1){
 		questCountdown()
 	}

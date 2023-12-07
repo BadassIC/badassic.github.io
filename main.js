@@ -16,6 +16,8 @@ fishBarBonus = 0
 fishBarText = ""
 fishBarTextHide = false
 
+const fishingButton = document.getElementById("fishingButton")
+
 questChance = 0
 questObj = 1
 questReq = 0
@@ -905,12 +907,6 @@ setInterval(function(){
 		document.getElementById("questNotif").style.display ="none"
 	}
 	
-	if (castStatus == 1){
-		document.getElementById("castLineButton").innerHTML = "Set up cast"
-	} else{
-		document.getElementById("castLineButton").innerHTML = "Cast line"
-	}
-	
 	if (questObj == "bass"){
 		console.log("helol")
 		if (bass.quantity >= questReq){
@@ -1202,9 +1198,6 @@ setInterval(function(){
 	}
 }, 10)
 
-document.getElementById("castLineButton").disabled = false
-document.getElementById("reelLineButton").disabled = true
-
 function castLine(){
 	if (castStatus == 1){
 		fishBarInterval = setInterval(function(){
@@ -1223,6 +1216,7 @@ function castLine(){
 			}
 		}, 15)
 		castStatus = 2
+		fishingButton.innerHTML = "Cast line"
 	} else if(castStatus == 2){
 		setTimeout(function(){
 			fishBarTextHide = true
@@ -1250,19 +1244,21 @@ function castLine(){
 		clearInterval(fishBarInterval)
 		line = "reel"
 		baited = false
-		document.getElementById("castLineButton").disabled = true
-		document.getElementById("reelLineButton").disabled = false
+
+		fishingButton.innerHTML = "Reel in line"
+		fishingButton.setAttribute("onclick", "reelLine()")
+
 		flash1 = setTimeout(function(){
 		baited = true
 		reelStatus = 1
 		flash2 = setInterval(function(){
 			if (reelStatus == 1){
-				document.getElementById("reelLineButton").style.color = "black"
-				document.getElementById("reelLineButton").style.fontSize = "100%"
+				fishingButton.style.color = "black"
+				fishingButton.style.fontSize = "100%"
 				reelStatus = 2
 			}else if (reelStatus == 2){
-				document.getElementById("reelLineButton").style.color = "red"
-				document.getElementById("reelLineButton").style.fontSize = "110%" 
+				fishingButton.style.color = "red"
+				fishingButton.style.fontSize = "110%" 
 				reelStatus = 1
 			}
 		}, 125)
@@ -1279,10 +1275,11 @@ function reelLine(){
 		clearInterval(flash2)
 	}
 	clearInterval(flash1)
-	document.getElementById("reelLineButton").disabled = true
-	document.getElementById("castLineButton").disabled = false
-	document.getElementById("reelLineButton").style.color = "black"
-	document.getElementById("reelLineButton").style.fontSize = "100%" 
+
+	fishingButton.setAttribute("onclick", "castLine()")
+	fishingButton.innerHTML = "Set up cast"
+	fishingButton.style.color = "black"
+	fishingButton.style.fontSize = "100%" 
 	castStatus = 1
 }
 
@@ -1829,6 +1826,7 @@ function retire(){
 	place = "Hedgefield"
 	reelStatus = 1
 	castStatus = 1
+	fishingButton.innerHTML = "Set up cast"
 	fishBarValue = 0
 	fishBarDirection = 1
 	fishBarBonus = 0

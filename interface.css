@@ -1,36 +1,40 @@
-.left{
+.left {
 	float: left;
 	clear: left;
 }
 
-.right{
+.right {
 	float: right;
 }
 
-.button1{
+.button1 {
 	width: 300px;
 	transition-duration: 0.4s;
 }
 
-.button2{
+.button2 {
 	width: 148px;
 	transition-duration: 0.1s;
 }
 
-.position1{
+.position1 {
 	float: left;
 	width:350px;
 }
 
-.w3-button{
+.w3-button {
 	color: w3-blue;
 }
 
-.w3-bar-item{
+.w3-bar-item {
 	transition-duration: 0.2s;
 }
 
-.body{
+.body {
 	color: #ffffff;
 	background-color: #393939;
+}
+
+#import {
+	display: none
 }
